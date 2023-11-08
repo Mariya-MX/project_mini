@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Counter</title>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex; /* Use flexbox to arrange boxes horizontally */
+            justify-content: space-between; /* Add space between boxes */
+        }
+
+        /* Style for the box */
+        .user-box {
+            width: 150px;
+            height: 100px;
+            background-color: #ffffff;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            text-align: center;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for the heading */
+        .user-box h2 {
+            color: #3498db;
+        }
+
+        /* Style for the user count */
+        .user-box p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- First box -->
+    <div class="user-box">
+        <h2>Total Users</h2>
+        <p id="userCount">100</p>
+    </div>
+
+    <!-- Second box -->
+    <div class="user-box">
+        <h2>Customers</h2>
+        <p id="orderCount">50</p>
+    </div>
+
+    <!-- Third box -->
+    <div class="user-box">
+        <h2>Technicians</h2>
+        <p id="visitCount">200</p>
+    </div>
+
+</body>
+</html>

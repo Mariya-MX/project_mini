@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico'%}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css'%}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css'%}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+
+  
+
+
+
+</head>
+<body>
+     <!-- Spinner Start -->
+     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5">
+        <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center">
+            <h6 class="m-0"><img class="img-fluid me-3" src="{% static 'img/icon/icon-02-primary.png'%}" alt="">EasyTech Repairs</h6>
+        </a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            {% comment %} <div class="navbar-nav mx-auto bg-light pe-4 py-3 py-lg-0">
+                <a href="{% url 'index' %}" class="nav-item nav-link active"></a>
+                <a href="#" class="nav-item nav-link"></a>
+                <a href="#" class="nav-item nav-link"></a>
+                <a href="{% url 'register'%}" class="nav-item nav-link"></a>
+                </div>  {% endcomment %}
+                
+            </div>
+            
+        </div>
+    </nav><br><br>
+    <!-- Navbar End -->
+
+  
+
+
+    
+
+
+    <div class="container">
+        <h2><center>Register<center></h2>
+            
+
+
+
+       
+        <form action="" method="post">
+            {% csrf_token %}
+
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <span class="error" id="usernameError" style="color:red";></span><br>
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <span class="error" id="emailError" style="color:red";></span><br>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <span class="error" id="passwordError" style="color:red";></span><br>
+            
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <span class="error" id="confirmPasswordError" style="color:red";></span><br>
+            
+            <label>User Type</label><br>
+            <input type="radio" id="customer" name="user_type" value="customer" required>
+            <label for="customer">User</label><br>
+            
+            <input type="radio" id="technician" name="user_type" value="technician" required>
+            <label for="technician">Technician</label><br><br>
+
+
+            {% if error_message %}
+            <div style="color: red;">
+                {{ error_message }}
+            </div>
+            {% endif %}
+            
+            <center><input type="submit" id="submitBtn" value="Register"></center><br>
+            <div class="text-center">
+			Already have an account? <a href="{% url 'login'%}">Sign In</a>
+			</div>
+
+        </form>
+    </div>
+
+
+   
+
+  <script>
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const submitBtn = document.getElementById('submitBtn');
+    
+
+    usernameInput.addEventListener('input', validateUsername);
+    emailInput.addEventListener('input', validateEmail);
+    passwordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+    
+    function validateUsername() {
+        const username = usernameInput.value;
+        const usernameError = document.getElementById('usernameError');
+    
+        // Check if the username starts with a capital letter
+        if (!/^[A-Z].*$/.test(username)) {
+            usernameError.textContent = 'Username must start with a capital letter.';
+        } else if (!/^[A-Z][a-zA-Z0-9]{0,9}$/.test(username)) {
+            // Check if the username contains characters other than uppercase letters, lowercase letters, and numbers
+            usernameError.textContent = 'Username can only contain uppercase letters followed by lowercase letters, characters, and numbers (maximum 10 characters).';
+        } else if (/\s/.test(username)) {
+            // Check if the username contains white spaces
+            usernameError.textContent = 'Username cannot contain white spaces.';
+        }
+        else if(username === '')
+        {
+            usernameError.textContent = 'Username cannot be empty.';
+            
+        }
+        else {
+            usernameError.textContent = '';
+        }
+    
+        checkFormValidity();
+    }
+
+   
+
+
+function validateEmail() {
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    const emailValue = emailInput.value.trim().toLowerCase(); // Convert to lowercase
+
+    if (emailValue === '') {
+        emailError.textContent = 'Email cannot be empty.';
+        emailError.style.color = 'red';
+    } else if (/^[0-9]/.test(emailValue)) {
+        emailError.textContent = 'Email cannot start with a number.';
+        emailError.style.color = 'red';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        emailError.textContent = 'Invalid email format.';
+        emailError.style.color = 'red';
+    } else {
+        emailError.textContent = '';
+    }
+    checkFormValidity();
+}
+
+
+
+
+
+    function validatePassword() {
+        const password = passwordInput.value;
+        const passwordError = document.getElementById('passwordError');
+        if (!/^[A-Z].{4,}$/.test(password)) {
+            passwordError.textContent = 'Password must start with a capital letter and be at least 5 characters long.';
+        } else {
+            passwordError.textContent = '';
+        }
+        checkFormValidity();
+    }
+
+    function validateConfirmPassword() {
+        const confirmPassword = confirmPasswordInput.value;
+        const password = passwordInput.value;
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        if (password !== confirmPassword) {
+            confirmPasswordError.textContent = 'Passwords do not match.';
+        } else {
+            confirmPasswordError.textContent = '';
+        }
+        checkFormValidity();
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function checkFormValidity() {
+        if (
+            usernameInput.validity.valid &&
+            emailInput.validity.valid &&
+            passwordInput.validity.valid &&
+            confirmPasswordInput.validity.valid &&
+            passwordInput.value === confirmPasswordInput.value
+        ) {
+            submitBtn.removeAttribute('disabled');
+        } else {
+            submitBtn.setAttribute('disabled', 'disabled');
+        
+        }
+    }
+
+</script>
+
+
+    
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js'%}"></script>
+    <script src="{% static 'lib/easing/easing.min.js'%}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js'%}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js'%}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js'%}"></script>
+    <script src="{% static 'lib/parallax/parallax.min.js'%}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js'%}"></script>
+
+
+<!-- Add this at the bottom of the file, after your existing scripts -->
+<script>
+    // Check if the registration_success variable is true
+    const registrationSuccess = "{{ registration_success }}";
+
+    if (registrationSuccess) {
+        // Display the confirmation box
+        alert("registration completer successfully!");
+
+        // Redirect to the login page
+        window.location.href = "{% url 'login' %}";
+    }
+</script>
+
+
+
+</body>
+</html>

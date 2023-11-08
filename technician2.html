@@ -1,0 +1,95 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Other Fields</h2>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <label for="jobTitle">Job Title:</label>
+    <input type="text" id="jobTitle" name="jobTitle" required>
+
+    <label for="companyName">Company Name:</label>
+    <input type="text" id="companyName" name="companyName" required>
+
+    <label for="educationField">Education Field:</label>
+    <select id="educationField" name="educationField" required>
+      <option value="Diploma">Diploma</option>
+      <option value="PG">PG</option>
+      <option value="UG">UG</option>
+      <option value="Btech">Btech</option>
+    </select>
+
+    <label for="skills">Skills:</label>
+    <select id="skills" name="skills[]" multiple required>
+      <option value="applianceDiagnostics">Appliance Diagnostics</option>
+      <option value="repairAndMaintenance">Repair and Maintenance</option>
+      <option value="electricalExpertise">Electrical Expertise</option>
+      <option value="efficientTroubleshooting">Efficient Troubleshooting</option>
+      <option value="mechanicalProficiency">Mechanical Proficiency</option>
+    </select>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Include Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <!-- icons-->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80%;
+            display: flex;
+        }
+
+        .left-panel {
+            width: 20%;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+
+        .round-box {
+            width: 150px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .round-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .right-panel {
+            width: 80%;
+            padding: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            margin-left: 80px;
+            position: relative;
+        }
+
+        .form-control {
+            width: 60%;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            border-radius: 0.25rem;
+            margin-top: 8px;
+        }
+
+        
+
+        hr {
+            width: 55%;
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin-left: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1></h1>
+       
+    <div class="container">
+        <div class="left-panel">
+            <div class="round-box" id="uploaded-image-box">
+                {% if user_profile.image %}
+                    <img id="uploaded-image" src="{{ user_profile.image.url }}" alt="User Image">
+                {% else %}
+                    <img id="uploaded-image" src="#" alt="User Image">
+                {% endif %}
+            </div>
+            <br>
+            <h4><b>{{user_profile.first_name}}  {{user_profile.last_name}}</b></h4>
+            <label>Email: {{ user.email }}</label>
+        </div>
+
+        <div class="right-panel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <form method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="user-image" class="label">Upload Profile Image</label>
+                            <input type="file" name="image" id="user-image" class="form-control" accept="image/*" onchange="updateImageLabel()" {% if not user_profile.image %}required{% endif %} readonly>
+                            <span id="image-label">{% if user_profile.image %}{{ user_profile.image.name }}{% else %}No file chosen{% endif %}</span>
+
+                            <hr>
+
+                            <label for="first-name" class="label">First Name</label>
+                            <input type="text" name="first_name" id="first-name" class="form-control" value="{% if user_profile.first_name %}{{ user_profile.first_name }}{% endif %}" {% if not user_profile.first_name %}required{% endif %} readonly>
+                            <hr>
+
+                            <label for="last-name" class="label">Last Name</label>
+                            <input type="text" name="last_name" id="last-name" class="form-control" value="{% if user_profile.last_name %}{{ user_profile.last_name }}{% endif %}" {% if not user_profile.last_name %}required{% endif %} readonly>
+                            <hr>
+
+                            <label for="mobile" class="label">Mobile Number</label>
+                            <input type="text" name="mobile" id="mobile" class="form-control" value="{% if user_profile.mobile %}{{ user_profile.mobile }}{% endif %}" {% if not user_profile.mobile %}required{% endif %} readonly>
+                            <hr>
+
+                            <label for="address" class="label">Address</label>
+                            <input type="text" name="address" id="address" class="form-control" value="{% if user_profile.address %}{{ user_profile.address }}{% endif %}" {% if not user_profile.address %}required{% endif %} readonly>
+                            <hr>
+                            
+    <!-- Add more options for other districts as needed -->
+
+
+                          <!-- ... (previous HTML code) ... -->
+
+<div class="form-group">
+    {% if created %}
+        <button type="submit" class="btn btn-lg btn-success" id="save-button">Save</button>
+    {% else %}
+        <div class="button-container row">
+            <div class="col">
+                <button type="button" class="btn btn-lg btn-primary" id="edit-button">Edit</button>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-lg btn-success" id="save-button" style="display: none;">Save</button>
+            </div>
+            <div class="col">
+                <a href="{% url 'technician' %}" class="btn btn-link custom-link-style">Add More Details(If applicable)</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .custom-link-style {
+        margin-left: -150px; /* Adjust this value as needed */
+    }
+</style>
+
+
+                           
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <!-- Add this div where it makes sense, for example, at the end of the body -->
+    <div id="hasDetails" style="display:none;" data-has-details="{% if user_profile.first_name or user_profile.last_name or user_profile.mobile or user_profile.address %}true{% else %}false{% endif %}"></div>
+
+    <!-- Your existing scripts -->
+    <script>
+        var hasDetails = document.getElementById('hasDetails').getAttribute('data-has-details') === 'true';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleReadOnly(hasDetails);
+        });
+
+        document.getElementById('edit-button').addEventListener('click', function() {
+            toggleReadOnly(false);
+        });
+
+        function toggleReadOnly(readOnly) {
+            var formFields = document.querySelectorAll('.form-control');
+            formFields.forEach(function(field) {
+                field.readOnly = readOnly;
+            });
+
+            document.getElementById('save-button').style.display = readOnly ? 'none' : 'block';
+            document.getElementById('edit-button').style.display = readOnly ? 'block' : 'none';
+        }
+    </script>
+</body>
+
+
+</html>

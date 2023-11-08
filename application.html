@@ -1,0 +1,173 @@
+<!-- application.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 50px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #202124;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #5f6368;
+            text-align: left;
+        }
+
+        label::before {
+            content: '* ';
+            color: red;
+        }
+
+        .optional-label::before {
+            content: '';
+        }
+
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4285f4;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357ae8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Display messages using Django messages framework -->
+
+    <h2>Job Application Form</h2>
+    
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Personal Information -->
+        <label for="firstName">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ first_name }}" required >
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ last_name }}" required >
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ email }}" required readonly>
+
+        <label for="number">Phone Number:</label>
+        <input type="tel" id="number" name="number" value="{{ phone_number }}" required >
+
+        <!-- Upload User Image -->
+        <label for="userImage">Upload User Image:</label>
+        <input type="file" id="tech_image" name="tech_image" accept="image/*" required>
+
+        <!-- Upload Resume (PDF) -->
+        <label for="resume">Upload Resume (PDF):</label>
+        <input type="file" id="resume" name="resume" accept=".pdf" required>
+
+        <!-- Upload ID Proof Image -->
+        <label for="idProof">Upload ID Proof Image:</label>
+        <input type="file" id="idProof" name="idProof" accept="image/*" required>
+
+        <!-- Experience -->
+        <label for="experience" class="optional-label">Years of Experience(optional)</label>
+        <input type="number" id="experience" name="experience" >
+
+        <!-- Service Field (Dropdown) -->
+        <label for="service">Select Service:</label>
+        <select id="service" name="service" required>
+            <option value="AC Repairer">AC Repairer</option>
+            <option value="Plumber">Plumber</option>
+            <option value="Electrician">Electrician</option>
+            <option value="TV Repairer">TV Repairer</option>
+        </select>
+
+        <!-- District Field (Dropdown) -->
+<label for="district">Select District:</label>
+<select id="district" name="district" required>
+    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+    <option value="Kollam">Kollam</option>
+    <option value="Pathanamthitta">Pathanamthitta</option>
+    <option value="Alappuzha">Alappuzha</option>
+    <option value="Kottayam">Kottayam</option>
+    <option value="Idukki">Idukki</option>
+    <option value="Ernakulam">Ernakulam</option>
+    <option value="Thrissur">Thrissur</option>
+    <option value="Palakkad">Palakkad</option>
+    <option value="Malappuram">Malappuram</option>
+    <option value="Kozhikode">Kozhikode</option>
+    <option value="Wayanad">Wayanad</option>
+    <option value="Kannur">Kannur</option>
+    <option value="Kasargod">Kasargod</option>
+</select>
+
+
+        <!-- Submit Button -->
+        <input type="submit" value="Submit">
+
+    </form>
+    
+
+
+
+    <!-- Add this script to your application.html file -->
+<!-- Add this script to your application.html file -->
+<script>
+    // Function to display a success message popup and redirect to technician_profile page
+    function showSuccessPopupAndRedirect() {
+        alert("Form submitted successfully! Your application has been received.");
+        window.location.href = "{% url 'technician_profile' %}";
+    }
+
+    // Check if the URL contains a success parameter (indicating a successful form submission)
+    const urlParams = new URLSearchParams(window.location.search);
+    const successParam = urlParams.get('success');
+
+    // If the success parameter is present, show the success popup and redirect
+    if (successParam === 'true') {
+        showSuccessPopupAndRedirect();
+    }
+</script>
+
+
+
+</body>
+</html>
+
+
