@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Coding by CodingNepal | www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Responsiive Admin Dashboard | CodingLab </title>
+    <link rel="stylesheet" href="{% static 'css/admin.css'%}">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+     <style>
+        /* Add this style block for the feedback cards */
+        .feedback-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-card strong {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .feedback-card p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .feedback-card small {
+            font-size: 12px;
+            color: #777;
+        }
+     </style>
+   </head>
+<body>
+  <div class="sidebar">
+    
+      <ul class="nav-links">
+        <li>
+          <a href="{% url 'custom_admin_panel' %}" class="active">
+            <i class='bx bx-grid-alt' ></i>
+            <span class="links_name">Dashboard</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="{% url 'userlist' %}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Users</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="{% url 'approval'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Technicians</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'approved'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Approved Technician</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'booking_graph'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Analysis</span>
+          </a>
+        </li>
+
+
+        <li>
+            <a href="{% url 'admin_feedback'%}" class="active">
+              <i class='bx bx-user'></i>
+              <span class="links_name">Feedback</span>
+            </a>
+          </li>
+
+        
+
+		
+        <li class="log_out">
+          <a href="{% url 'logout' %}" id="logout-link" style="color: white;">
+            <i class='bx bx-log-out'></i>
+            <span class="">Log out</span>
+          </a>
+        </li>
+      </ul>
+  </div>
+
+
+  <section class="home-section">
+    <nav>
+        <div class="sidebar-button">
+            <i class='bx bx-menu sidebarBtn'></i>
+            <span class="dashboard">Admin Dashboard</span>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="feedback-container">
+            <h2>Users Feedbacks</h2>
+            {% for feedback in feedback_list %}
+                <div class="feedback-card">
+                    <strong>{{ feedback.user.username }}</strong>
+                    <p>{{ feedback.text }}</p>
+                    <small>{{ feedback.created_at }}</small>
+                    
+                    <!-- Reply Form -->
+                    <form method="post" class="reply-form">
+                        {% csrf_token %}
+                        <label for="reply_{{ feedback.id }}">Your Reply:</label>
+                        <textarea id="reply_{{ feedback.id }}" name="reply_text" rows="2" placeholder="Write your reply..." required></textarea>
+                        <br>
+                        <button type="submit">Submit Reply</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+   
+
+    
+    
+
+       
+
+
+      
+</section>
+  <script>
+   let sidebar = document.querySelector(".sidebar");
+let sidebarBtn = document.querySelector(".sidebarBtn");
+sidebarBtn.onclick = function() {
+  sidebar.classList.toggle("active");
+  if(sidebar.classList.contains("active")){
+  sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+}else
+  sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+}
+ </script>
+
+</body>
+</html>
