@@ -138,3 +138,13 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mariyaxavier2024b@mca.ajce.in'  
 EMAIL_HOST_PASSWORD = 'Ma1X2#rc8'  
 DEFAULT_FROM_EMAIL = 'grovegusto@gmail.com'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_DEBUG = True
