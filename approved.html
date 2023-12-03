@@ -1,0 +1,118 @@
+
+{% load static %}
+<!DOCTYPE html>
+<!-- Coding by CodingNepal | www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Responsiive Admin Dashboard | CodingLab </title>
+    <link rel="stylesheet" href="{% static 'css/users.css'%}">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+     <style>
+          .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        margin-left: 50px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+    }
+
+    .card img {
+        width: 50%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+     </style>
+   </head>
+<body>
+  <div class="sidebar">
+    
+      <ul class="nav-links">
+        <li>
+          <a href="{% url 'custom_admin_panel' %}" class="active">
+            <i class='bx bx-grid-alt' ></i>
+            <span class="links_name">Dashboard</span>
+          </a>
+        </li>
+
+        <li>
+            <a href="{% url 'userlist' %}" class="active">
+              <i class='bx bx-user'></i>
+              <span class="links_name">Users</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'approval'%}" class="active">
+              <i class='bx bx-user'></i>
+              <span class="links_name">Technician</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'approved'%}" class="active">
+              <i class='bx bx-user'></i>
+              <span class="links_name">Approved Technician</span>
+            </a>
+          </li>
+
+          
+        <li>
+          <a href="{% url 'booking_graph'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Analysis</span>
+          </a>
+        </li>
+
+        <li class="log_out">
+          <a href="{% url 'logout' %}" id="logout-link" style="color: white;">
+            <i class='bx bx-log-out'></i>
+            <span class="">Log out</span>
+          </a>
+        </li>
+      </ul>
+  </div>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class='bx bx-menu sidebarBtn'></i>
+        <span class="dashboard">Admin Dashboard</span>
+      </div>
+    </nav>
+
+    <div class="home-content">
+      <h2 style="text-align: center;">Approved Technicians</h2><br>
+      <div class="card-container">
+          {% for technician in approved_technicians %}
+              <div class="card">
+                  <img src="{{ technician.technician_profile.tech_image.url }}" alt="Technician Image">
+                  <p>Technician: {{ technician.technician_profile.tech_first_name }} {{ technician.technician_profile.tech_last_name }}</p>
+                  <p>Email: {{ technician.technician_profile.tech_email }}</p>
+                  <p>Service: {{ technician.technician_profile.service }}</p>
+                  <p>Experience: {{ technician.technician_profile.experience }} years</p>
+                  <p>District: {{ technician.technician_profile.district }}</p>
+                  <!-- Add other details as needed -->
+              </div>
+          {% endfor %}
+      </div>
+  </div>
+</section>
+</body>
+</html>
