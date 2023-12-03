@@ -1,0 +1,67 @@
+<!-- enter_fee.html -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var razorpay_key = 'rzp_test_pXtAk0XSRYeIWR';
+
+    function handlePayment() {
+        var amount = document.getElementById('repair_fee').value;
+
+        // Open a modal
+        var modal = document.getElementById('paymentModal');
+        modal.style.display = 'block';
+
+        var options = {
+            key: razorpay_key,
+            amount: amount * 100,  // Amount in paise
+            name: 'Your Company Name',
+            description: 'Repair Fee Payment',
+            handler: function (response) {
+                // Handle the Razorpay success callback
+                var paymentForm = document.getElementById('paymentForm');
+                var paymentIdInput = document.createElement('input');
+                paymentIdInput.type = 'hidden';
+                paymentIdInput.name = 'payment_id';
+                paymentIdInput.value = response.razorpay_payment_id;
+                paymentForm.appendChild(paymentIdInput);
+
+                // Submit the form after adding the payment_id
+                paymentForm.submit();
+            },
+            prefill: {
+                name: 'User Name',
+                email: 'user@example.com',
+                contact: '1234567890'
+            },
+            theme: {
+                color: '#528FF0'
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+        return false; // Prevent the form from submitting normally
+    }
+
+    function closePaymentModal() {
+        var modal = document.getElementById('paymentModal');
+        modal.style.display = 'none';
+    }
+</script>
+
+<h1>Enter Repair Fee</h1>
+
+<form id="paymentForm" action="{% url 'process_payment' %}" method="post" onsubmit="return handlePayment();">
+    {% csrf_token %}
+    <label for="repair_fee">Repair Fee:</label>
+    <input type="text" id="repair_fee" name="repair_fee" required>
+
+    <button type="submit">Pay</button>
+</form>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePaymentModal()">&times;</span>
+        <!-- Razorpay payment form goes here -->
+    </div>
+</div>
