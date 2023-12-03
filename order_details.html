@@ -1,0 +1,54 @@
+<!-- order_details.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Details</title>
+</head>
+<body>
+
+<h1>Order Details</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Service</th>
+            <th>Phone</th>
+            <th>District</th>
+            <th>Preferred Date</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            
+            <td>{{ booking.user.id }}</td>
+            <td>{{ booking.user.username }}</td>
+            <td>{{ booking.fullname }}</td>
+            <td>{{ booking.email }}</td>
+            <td>{{ booking.service }}</td>
+            <td>{{ booking.phone }}</td>
+            <td>{{ booking.district }}</td>
+            <td>{{ booking.preferred_date }}</td>
+            <td>{{ booking.description }}</td>
+            <td>
+                {% if not booking.work_completed %}
+                    <form method="post" action="{% url 'mark_work_completed' booking.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Work Completed</button>
+                    </form>
+                {% else %}
+                    Work Completed
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -82,7 +82,7 @@ tr:nth-child(even) {
 <body>
     <div class="sidebar">
         <ul class="nav-links">
-            <br>
+           
             <li>
                 <a href="{% url 'custom_admin_panel' %}" class="active">
                     <i class='bx bx-grid-alt'></i>
@@ -101,9 +101,24 @@ tr:nth-child(even) {
             <li>
                 <a href="{% url 'approval'%}" class="active">
                   <i class='bx bx-user'></i>
-                  <span class="links_name">Technician</span>
+                  <span class="links_name">Technicians</span>
                 </a>
               </li>
+
+              <li>
+                <a href="{% url 'approved'%}" class="active">
+                  <i class='bx bx-user'></i>
+                  <span class="links_name">Approved Technician</span>
+                </a>
+              </li>
+
+              
+        <li>
+            <a href="{% url 'booking_graph'%}" class="active">
+              <i class='bx bx-user'></i>
+              <span class="links_name">Analysis</span>
+            </a>
+          </li>
 
             <li class="log_out">
                 <a href="{% url 'logout' %}" id="logout-link" style="color: white;">

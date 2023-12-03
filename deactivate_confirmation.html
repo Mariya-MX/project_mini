@@ -1,0 +1,32 @@
+<!-- deactivate_confirmation.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deactivate Confirmation</title>
+</head>
+<body>
+    <h1>Deactivate Confirmation</h1>
+    <p>Are you sure you want to deactivate your account, {{ user.username }} (Email: {{ user.email }})?</p>
+
+    <form id="deactivateForm" method="post" action="{% url 'deactivate_confirmation' %}">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="{{ user.username }}">
+        <input type="hidden" name="email" value="{{ user.email }}">
+        <input type="submit" value="OK">
+    </form>
+
+    <!-- Add your deactivation confirmation logic or form here -->
+    
+    <!-- JavaScript for Confirmation -->
+    <script>
+        document.getElementById("deactivateForm").addEventListener("submit", function(event) {
+            var confirmation = confirm("Are you sure you want to deactivate your account?");
+            if (!confirmation) {
+                event.preventDefault(); // Cancel form submission if user clicks "Cancel"
+            }
+        });
+    </script>
+</body>
+</html>

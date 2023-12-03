@@ -78,8 +78,10 @@
                 <a href="#" class="nav-item nav-link"></a>
                 <a href="{% url 'services' %}" class="nav-item nav-link" style="color: black;">Our Services</a>
                 <a href="#" class="nav-item nav-link"></a>
+                <a href="{% url 'booking' %}" class="nav-item nav-link" style="color: black;">Book Service</a>
                 <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
                 <a href="{% url 'profile' %}" class="nav-item nav-link" id="" style="color: black;">My Profile</a>
+                
 
 
                 <!-- <div class="nav-item dropdown">
@@ -95,6 +97,26 @@
             </div>
             
         </div>
+        {% if user.is_authenticated %}
+        {% for booking in user.booking_set.all %}
+            {% if booking.work_completed %}
+                <!-- Show content or perform actions for a user with a completed booking -->
+            <a href="{% url 'enter_fee' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-wrench"></i> Pay Now
+            </a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    
+
+    
+<!-- Notification icon -->
+<a href="{% url 'notification_customer' %}" class="nav-item nav-link" style="color: black;">
+    <i class="fas fa-bell"></i> <!-- Assuming you have a bell icon from Font Awesome -->
+</a>
+
+
+    
         
         <a href="#" class="nav-item nav-link">
             <!-- <i class="fas fa-user" style="margin-right: 5px; font-size: 1.2em;"></i> -->
@@ -123,7 +145,7 @@
 
 
 
-
+    
 
 
 
@@ -139,8 +161,6 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-7 pt-5">
                                     <h1 class="display-10 text-white mb-4 animated slideInDown">We Provide Best Home Appliances Repair Services</h1>
-                                    
-                                    
                                 </div>
                             </div>
                         </div>

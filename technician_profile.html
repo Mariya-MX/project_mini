@@ -54,6 +54,7 @@
 </head>
 
 <body>
+    
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
@@ -72,24 +73,38 @@
             <div class="navbar-nav mx-auto bg-light pe-4 py-3 py-lg-0">
                 
                 <!-- <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a> -->
+              
+
                 <a href="#" class="nav-item nav-link"></a>
                 <a href="{% url 'services' %}" class="nav-item nav-link" style="color: black;">Our Services</a>
                 <a href="#" class="nav-item nav-link"></a>
                 <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
+                {% if user.is_authenticated and user.technicianprofile.is_approved %}
+                <a href="{% url 'technician_availability'%}" class="nav-item nav-link" style="color: black;">Technician Availability</a>
+                {% endif %}
+
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"  style="color: black;">My Profile</a>
                     <div class="dropdown-menu bg-light border-0 m-0">
                         <a href="{% url 'profile' %}" class="dropdown-item">Manage Profile</a>
                         <a href="{% url 'application' %}" class="dropdown-item">Registration form</a>
                         <a href="{% url 'change_password'%}" class="dropdown-item">change password</a>
+                        <a href="{% url 'order_details' %}" class="dropdown-item">order details</a>
                         <!-- <a href="#" class="dropdown-item">View Details</a> -->
-                    
+                  
                     </div>
                 </div>
                
             </div>
             
         </div>
+     <!-- Notification icon -->
+<a href="{% url 'notifications_page' %}" class="nav-item nav-link" style="color: black;">
+    <i class="fas fa-bell"></i> <!-- Assuming you have a bell icon from Font Awesome -->
+</a>
+
+
+
         <a href="#" class="nav-item nav-link">
             <!-- <i class="fas fa-user" style="margin-right: 5px; font-size: 1.2em;"></i> -->
             {{ user.username }}
@@ -107,7 +122,6 @@
     </nav>
     <!-- Navbar End -->
 
-    
 
 
     <!-- Carousel Start -->
