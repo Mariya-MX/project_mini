@@ -21,9 +21,32 @@ urlpatterns = [
    path('change_password/', views.change_password, name='change_password'),
    path('approval/', views.approval, name='approval'),
    path('deactivate_user/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
+   path('approve_technician/<int:technician_profile_id>/', views.approve_technician, name='approve_technician'),
+   path('reject_technician/<int:technician_profile_id>/', views.reject_technician, name='reject_technician'),
+   path('approved/', views.approved, name='approved'),
+   path('technician_availability/', views.technician_availability, name='technician_availability'),
+   path('cancel_availability/<int:availability_id>/', views.cancel_availability, name='cancel_availability'),
+   path('booking/', views.booking, name='booking'),
+#    path('clear_notification/<int:notification_id>/', views.clear_notification, name='clear_notification'),
+   path('notifications_page/', views.notifications_page, name='notifications_page'),
+   path('notification_customer/', views.notification_customer, name='notification_customer'),
+#    path('view_booking/<int:booking_id>/', views.view_booking, name='view_booking'),
+   path('order-details/', views.order_details, name='order_details'),
+   path('mark-work-completed/<int:booking_id>/', views.mark_work_completed, name='mark_work_completed'),
+   path('enter_fee/', views.enter_fee, name='enter_fee'),
+   path('process_payment/',views.ProcessPaymentView.as_view(), name='process_payment'),
+
+   path('booking_graph/', views.booking_graph, name='booking_graph'),
+#    path('deactivate_confirmation/', views.deactivate_confirmation, name='deactivate_confirmation'),
+#    path('deactivate/', views.deactivate, name='deactivate'),
+   path('feedback/', views.feedback, name='feedback'),
+   path('admin_feedback/', views.admin_feedback, name='admin_feedback'),
+
+
+    
 
   
-
+  
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(),name='password_reset'),
