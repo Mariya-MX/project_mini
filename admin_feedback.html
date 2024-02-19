@@ -13,30 +13,53 @@
      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
      <style>
-        /* Add this style block for the feedback cards */
-        .feedback-card {
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .feedback-card strong {
-            font-size: 18px;
-            color: #333;
-        }
-
-        .feedback-card p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .feedback-card small {
-            font-size: 12px;
-            color: #777;
-        }
-     </style>
+      /* Add this CSS to center each feedback card */
+      .feedback-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center items horizontally */
+        gap: 15px;
+      }
+    
+      .feedback-card {
+        background-color: hsl(110, 13%, 91%); /* Light green background */
+        border: 1px solid #d6e9c6; /* Border color */
+        border-radius: 8px;
+        padding: 10px; /* Decreased padding */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 80%; /* Decreased width */
+        box-sizing: border-box;
+        transition: transform 0.3s ease-in-out;
+      }
+    
+      .feedback-card:hover {
+        transform: translateY(-5px);
+      }
+    
+      .feedback-card strong {
+        display: block;
+        margin-bottom: 8px; /* Decreased margin */
+        font-size: 0.9em; /* Adjusted font size */
+        color: #120f11; /* Dark green text color */
+      }
+    
+      .feedback-card p {
+        margin-bottom: 8px; /* Decreased margin */
+        font-size: 0.8em; /* Adjusted font size */
+        color: #31708f; /* Dark blue text color */
+      }
+    
+      .feedback-card small {
+        font-size: 0.7em; /* Further reduced font size */
+        color: #888; /* Light gray small text color */
+      }
+    </style>
+    
+    
+    
+    
+    
+    
    </head>
 <body>
   <div class="sidebar">
@@ -107,6 +130,7 @@
             <span class="dashboard">Admin Dashboard</span>
         </div>
     </nav>
+    <br><br><br><br><br>
 
     <div class="content">
         <div class="feedback-container">
@@ -117,14 +141,7 @@
                     <p>{{ feedback.text }}</p>
                     <small>{{ feedback.created_at }}</small>
                     
-                    <!-- Reply Form -->
-                    <form method="post" class="reply-form">
-                        {% csrf_token %}
-                        <label for="reply_{{ feedback.id }}">Your Reply:</label>
-                        <textarea id="reply_{{ feedback.id }}" name="reply_text" rows="2" placeholder="Write your reply..." required></textarea>
-                        <br>
-                        <button type="submit">Submit Reply</button>
-                    </form>
+                   
                 </div>
             {% endfor %}
         </div>

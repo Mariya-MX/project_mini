@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Coding by CodingNepal | www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Responsiive Admin Dashboard | CodingLab </title>
+    <link rel="stylesheet" href="{% static 'css/admin.css'%}">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+   
+     <style>
+      /* Add this CSS to your existing stylesheet or create a new one */
+
+.form-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Add this CSS to your existing stylesheet or create a new one */
+
+#submitBtn {
+  background: #0A2558;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#submitBtn:hover {
+  background: #081D45;
+}
+
+
+
+     </style>
+   </head>
+<body>
+  <div class="sidebar">
+    
+      <ul class="nav-links">
+        <li>
+          <a href="{% url 'custom_admin_panel' %}" class="active">
+            <i class='bx bx-grid-alt' ></i>
+            <span class="links_name">Dashboard</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="{% url 'userlist' %}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Users</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="{% url 'approval'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Technicians</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'approved'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Approved Technician</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'booking_graph'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Analysis</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'admin_feedback'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Feedback</span>
+          </a>
+        </li>
+
+		
+        <li class="log_out">
+          <a href="{% url 'logout' %}" id="logout-link" style="color: white;">
+            <i class='bx bx-log-out'></i>
+            <span class="">Log out</span>
+          </a>
+        </li>
+      </ul>
+  </div>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class='bx bx-menu sidebarBtn'></i>
+        <span class="dashboard">Admin Dashboard</span>
+      </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- New form added here -->
+    <div class="form-container">
+
+
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
+      <form action="" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" required>
+          </div>
+          
+          <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required>
+          </div>
+          
+          <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" required>
+          </div>
+          
+          <div class="form-group">
+              <label for="confirmpassword">Confirm Password:</label>
+              <input type="password" id="confirmpassword" name="confirmpassword" required>
+          </div>
+
+          <input type="radio" id="Delivery" name="user_type" value="Delivery" required>
+            <label for="Delivery">Delivery</label><br><br>
+
+            <input type="submit" id="submitBtn" value="Register">
+          <!-- <button type="submit">Submit</button> -->
+      </form>
+  </div>
+    
+  </section>
+
+ 
+
+ 
+</body>
+</html>
+
+
