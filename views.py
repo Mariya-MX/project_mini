@@ -123,6 +123,9 @@ def user_login(request):
             elif user.user_type == 'customer':
                 request.session['user_type'] = 'customer'
                 return redirect('customer_profile')
+            elif user.user_type == 'Delivery':
+                request.session['user_type'] = 'Delivery'
+                return redirect('delivery')
             else:
                 return HttpResponse('Invalid user type')
             
@@ -135,9 +138,6 @@ def user_login(request):
             return render(request, 'login.html', {'error_message': error_message})
 
     return render(request, 'login.html')
-
-
-
 
 
 
@@ -211,10 +211,11 @@ def custom_admin_panel(request):
 
 
 
-
+from django.core.validators import RegexValidator
 @login_required(login_url='login')
 def profile(request):
     user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
 
     if request.method == 'POST':
         # Process form data manually
@@ -222,6 +223,7 @@ def profile(request):
         user_profile.last_name = request.POST.get('last_name')
         user_profile.mobile = request.POST.get('mobile')
         user_profile.address = request.POST.get('address')
+
 
         # Handle image upload manually
         if 'image' in request.FILES:
@@ -246,9 +248,6 @@ def technician(request):
 def technician_info(request):
     return render(request,"technician2.html")
     
-
-
-
 
 
 
@@ -517,78 +516,8 @@ def cancel_availability(request, availability_id):
 
 
 
-# from django.contrib import messages
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.decorators import login_required
-# from .models import Booking, TechnicianProfile, TechnicianAvailability,Notification
- 
 
-# @login_required(login_url='login')
-# def booking(request):
-    
-#     if request.method == 'POST':
-#         # Get form data
-#         fullname = request.POST.get('fullname')
-#         email = request.POST.get('email')
-#         service = request.POST.get('service')
-#         phone = request.POST.get('phone')
-#         district = request.POST.get('district')
-#         preferred_date = request.POST.get('date')
-#         description = request.POST.get('description')
-
-#         # Assuming the user is logged in
-#         user = request.user
-
-        
-
-#         # Check technician availability for the selected date
-#         available_technicians = TechnicianProfile.objects.filter(
-#             district=district,
-#             service=service,
-#             is_approved=True,
-#             technicianavailability__date=preferred_date,
-#         )
-
-
-        
-#         if available_technicians.exists():
-#             # Technician is available, create a new booking instance
-#             booking = Booking.objects.create(
-#                 user=user,
-#                 fullname=fullname,
-#                 email=email,
-#                 service=service,
-#                 phone=phone,
-#                 district=district,
-#                 preferred_date=preferred_date,
-#                 description=description
-#             )
-
-
-#               # Create a notification for the user with booking details
-#             notification_message = f'Booking details: {fullname}, {preferred_date}, {description}'
-#             Notification.objects.create(user=user, message=notification_message)
-
-
-
-             
-            
-#             # Optionally, you can add a success message
-#             messages.success(request, 'Booking submitted successfully.')
-
-            
-
-            
-#         else:
-#             # Technician is not available, add an error message
-#             messages.error(request, 'Sorry, no available technician for the selected service, district, and date.')
-
-#         # Redirect to the booking form page
-#         return redirect('booking')
-
-#     return render(request, 'booking.html')
-
-
+import datetime 
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -610,6 +539,7 @@ def booking(request):
 
         # Assuming the user is logged in
         user = request.user
+
 
         # Check technician availability for the selected date
         available_technicians = TechnicianProfile.objects.filter(
@@ -650,16 +580,12 @@ def booking(request):
 
         else:
             # Technician is not available, add an error message
-            messages.error(request, 'Sorry, no available technician for the selected service, district, and date.')
+            messages.error(request, 'Sorry,the service is not available on this date.choose another date')
 
         # Redirect to the booking form page
         return redirect('booking')
 
     return render(request, 'booking.html')
-
-
-
-
 
 
 
@@ -759,11 +685,33 @@ def enter_fee(request):
 
 
 # views.py
+# from django.shortcuts import render
+# from django.views import View
+# from .models import Payment
+
+# class ProcessPaymentView(View):
+#     def post(self, request, *args, **kwargs):
+#         amount = float(request.POST.get('repair_fee'))
+
+#         # Create a new Payment instance
+#         payment = Payment.objects.create(
+#             user=request.user,
+#             amount=amount,
+#         )
+
+#         # You should implement logic here to verify the payment with Razorpay
+#         # Update payment status or perform any additional processing
+
+#         return render(request, 'payment_success.html', {'payment': payment})
+
+
 from django.shortcuts import render
 from django.views import View
 from .models import Payment
 
 class ProcessPaymentView(View):
+    template_name = 'payment_success.html'  # Create a template for displaying success message
+
     def post(self, request, *args, **kwargs):
         amount = float(request.POST.get('repair_fee'))
 
@@ -776,7 +724,8 @@ class ProcessPaymentView(View):
         # You should implement logic here to verify the payment with Razorpay
         # Update payment status or perform any additional processing
 
-        return render(request, 'payment_success.html', {'payment': payment})
+        # Render the template with the success message
+        return render(request, self.template_name, {'payment': payment, 'success_message': 'Your payment successfully completed!'})
 
 
 from django.shortcuts import render
@@ -878,3 +827,262 @@ from .models import Feedback
 def admin_feedback(request):
     feedback_list = Feedback.objects.all().order_by('-created_at')  # Fetch all feedbacks, order by creation time
     return render(request, 'admin_feedback.html', {'feedback_list': feedback_list})
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from django.contrib import messages
+
+def admin_delivery(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirmpassword')
+        user_type = request.POST.get('user_type')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return redirect('admin_delivery')
+
+        # Create a new CustomUser object
+        User = get_user_model()
+        new_user = User(
+            username=username,
+            email=email,
+            password=make_password(password),
+            user_type=user_type
+        )
+        new_user.save()
+
+        messages.success(request, 'User registered successfully')
+        return redirect('admin_delivery')
+
+    return render(request, 'admin_delivery.html')
+
+
+def delivery(request):
+    return render(request,'delivery_profile.html')
+
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import Product, UserProfile
+
+@login_required(login_url='login')
+def sellproducts(request):
+    user = request.user
+
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+
+    if request.method == 'POST':
+        brand_name = request.POST.get('brandName')
+        category = request.POST.get('category')
+        ad_title = request.POST.get('adtitle')
+        price = request.POST.get('price')
+        description = request.POST.get('description')
+        contact = request.POST.get('contact')
+
+        # Assuming you have already handled file uploads and stored file paths in variables like image1, image2, etc.
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        image4 = request.FILES.get('image4')
+
+        # Create and save the product object
+        product = Product.objects.create(
+            owner=user,  # Assign the current user as the owner of the product
+            brand_name=brand_name,
+            category=category,
+            ad_title=ad_title,
+            price=price,
+            description=description,
+            contact=contact,
+            image1=image1,
+            image2=image2,
+            image3=image3,
+            image4=image4
+        )
+
+        # Redirect to the same page after successful submission
+        return redirect('sell')  
+
+    return render(request, 'sell.html', {'user_profile': user_profile})
+
+
+
+
+
+
+
+# from django.shortcuts import render
+# from .models import UserProfile, Product
+
+# def appliances(request):
+#     user = request.user
+#     try:
+#         # Attempt to retrieve the user's profile
+#         user_profile = UserProfile.objects.get(user=user)
+#     except UserProfile.DoesNotExist:
+#         # If the profile does not exist, create a new one
+#         user_profile = UserProfile.objects.create(user=user)
+
+#     # Retrieve all products from the database
+#     all_products = Product.objects.all()
+
+#     return render(request, 'appliances.html', {'user_profile': user_profile, 'products': all_products})
+
+from django.shortcuts import render
+from .models import UserProfile, Product
+
+def appliances(request):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+
+    # Retrieve all products from the database
+    all_products = Product.objects.all()
+
+    # Check if any category filter is applied
+    category_filter = request.GET.get('category')
+    if category_filter:
+        # If a category is selected, filter products based on that category
+        if category_filter != 'all':
+            all_products = all_products.filter(category=category_filter)
+
+    return render(request, 'appliances.html', {'user_profile': user_profile, 'products': all_products})
+
+
+
+# def appliances(request):
+#     user = request.user
+#     try:
+#         # Attempt to retrieve the user's profile
+#         user_profile = UserProfile.objects.get(user=user)
+#     except UserProfile.DoesNotExist:
+#         # If the profile does not exist, create a new one
+#         user_profile = UserProfile.objects.create(user=user)
+
+#     return render(request,'appliances.html',{'user_profile': user_profile})
+
+
+
+
+from .models import Product
+
+def product_status(request):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+
+    # Fetch products posted by the user
+    user_products = Product.objects.filter(owner=user)
+
+    return render(request, 'sell_product_status.html', {'user_profile': user_profile, 'user_products': user_products})
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product
+
+def delete_product(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        product.delete()
+        return redirect('sell_product_status')
+
+    return redirect('sell_product_status')  
+
+
+# def appliance_details(request):
+#     user = request.user
+#     try:
+#         # Attempt to retrieve the user's profile
+#         user_profile = UserProfile.objects.get(user=user)
+#     except UserProfile.DoesNotExist:
+#         # If the profile does not exist, create a new one
+#         user_profile = UserProfile.objects.create(user=user)
+#     return render(request,'appliance_sub.html',{'user_profile': user_profile})
+
+
+
+
+
+
+
+# def appliance_details(request):
+#     user = request.user
+#     try:
+#         # Attempt to retrieve the user's profile
+#         user_profile = UserProfile.objects.get(user=user)
+#     except UserProfile.DoesNotExist:
+#         # If the profile does not exist, create a new one
+#         user_profile = UserProfile.objects.create(user=user)
+
+#     return render(request,'appliance_sub.html',{'user_profile': user_profile})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Product
+
+def appliance_details(request, product_id):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+
+    # Retrieve the product based on the provided product_id
+    product = get_object_or_404(Product, pk=product_id)
+
+    return render(request, 'appliance_sub.html', {'user_profile': user_profile, 'product': product})
+
+
+def chat(request):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+     
+    return render(request,'chat.html',{'user_profile': user_profile})
+
+
+
+# def wishlist(request):
+#     user = request.user
+#     try:
+#         # Attempt to retrieve the user's profile
+#         user_profile = UserProfile.objects.get(user=user)
+#     except UserProfile.DoesNotExist:
+#         # If the profile does not exist, create a new one
+#         user_profile = UserProfile.objects.create(user=user)
+     
+#     return render(request,'wishlist.html',{'user_profile': user_profile})
+
+
+# views.py
+# views.py
+
+
