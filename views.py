@@ -75,8 +75,6 @@ def register(request):
             return render(request, 'register.html', {'error_message': error_message})
         
 
-
-        
         # Check if the email already exists in the database
         if CustomUser.objects.filter(email=email).exists():
             return render(request, 'register.html', {'error_message': 'Email address is already in use.'})
@@ -762,41 +760,7 @@ def booking_graph(request):
     return render(request, 'booking_graph.html', {'image_base64': image_base64})
 
 
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth import logout
-# from django.db import IntegrityError
-# from .models import DeactivatedUser
 
-# @login_required
-# def deactivate_confirmation(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         email = request.POST.get('email')
-
-#         try:
-#             # Try to create a new DeactivatedUser instance
-#             deactivated_user, created = DeactivatedUser.objects.get_or_create(user=request.user)
-#         except IntegrityError:
-#             # If a UNIQUE constraint error occurs, update the existing instance
-#             deactivated_user = DeactivatedUser.objects.filter(user=request.user).first()
-#             if deactivated_user:
-#                 deactivated_user.save()
-
-#         # Logout the user
-#         logout(request)
-
-#         # Redirect to the index page (replace 'index' with your desired page)
-#         return redirect('index')
-
-#     return render(request, 'deactivate_confirmation.html', {'user': request.user})
-
-# from django.shortcuts import render
-# from .models import DeactivatedUser
-
-# def deactivate(request):
-#     deactivated_users = DeactivatedUser.objects.all()
-#     return render(request, 'deactivate.html', {'deactivated_users': deactivated_users})
 
 
 # views.py
@@ -831,6 +795,7 @@ def admin_feedback(request):
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from django.contrib import messages
 
 def admin_delivery(request):
@@ -844,28 +809,56 @@ def admin_delivery(request):
         if password != confirm_password:
             messages.error(request, 'Passwords do not match')
             return redirect('admin_delivery')
+        
+
+        User = get_user_model()
+        
+
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email is already registered')
+            return redirect('admin_delivery')
 
         # Create a new CustomUser object
         User = get_user_model()
-        new_user = User(
-            username=username,
-            email=email,
-            password=make_password(password),
-            user_type=user_type
-        )
-        new_user.save()
+        try:
+            new_user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                user_type=user_type
+            )
 
-        messages.success(request, 'User registered successfully')
+            # Send email to the user
+            subject = 'Welcome to Our Site!'
+            message = f'Hi {username},\n\nWelcome to our site. Your username is: {username} and your password is: {password}.'
+            from_email = "mariyaxavier2024b@mca.ajce.in"
+            recipient_list = [email]
+            send_mail(subject, message, from_email, recipient_list)
+
+            messages.success(request, 'User registered successfully')
+        except IntegrityError as e:
+            if 'UNIQUE constraint failed: app1_customuser.username' in str(e):
+                messages.error(request, 'Username is already registered')
+            elif 'UNIQUE constraint failed: app1_customuser.email' in str(e):
+                messages.error(request, 'Email is already registered')
+            else:
+                messages.error(request, f'Error occurred: {str(e)}')
+        
         return redirect('admin_delivery')
 
     return render(request, 'admin_delivery.html')
+
+
+   
+
 
 
 def delivery(request):
     return render(request,'delivery_profile.html')
 
 
-
+# correct
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -911,6 +904,10 @@ def sellproducts(request):
             image4=image4
         )
 
+
+        # Show a success message
+        messages.success(request, 'Product added successfully!')
+
         # Redirect to the same page after successful submission
         return redirect('sell')  
 
@@ -939,6 +936,9 @@ def sellproducts(request):
 
 #     return render(request, 'appliances.html', {'user_profile': user_profile, 'products': all_products})
 
+
+
+# correct
 from django.shortcuts import render
 from .models import UserProfile, Product
 
@@ -978,7 +978,7 @@ def appliances(request):
 
 
 
-
+# correct
 from .models import Product
 
 def product_status(request):
@@ -998,7 +998,7 @@ def product_status(request):
 
 
 
-
+# correct
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 
@@ -1011,19 +1011,15 @@ def delete_product(request, product_id):
     return redirect('sell_product_status')  
 
 
-# def appliance_details(request):
-#     user = request.user
-#     try:
-#         # Attempt to retrieve the user's profile
-#         user_profile = UserProfile.objects.get(user=user)
-#     except UserProfile.DoesNotExist:
-#         # If the profile does not exist, create a new one
-#         user_profile = UserProfile.objects.create(user=user)
-#     return render(request,'appliance_sub.html',{'user_profile': user_profile})
-
-
-
-
+def appliance_details(request):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+    return render(request,'appliance_sub.html',{'user_profile': user_profile})
 
 
 
@@ -1057,20 +1053,20 @@ def appliance_details(request, product_id):
     return render(request, 'appliance_sub.html', {'user_profile': user_profile, 'product': product})
 
 
-def chat(request):
-    user = request.user
-    try:
-        # Attempt to retrieve the user's profile
-        user_profile = UserProfile.objects.get(user=user)
-    except UserProfile.DoesNotExist:
-        # If the profile does not exist, create a new one
-        user_profile = UserProfile.objects.create(user=user)
-     
-    return render(request,'chat.html',{'user_profile': user_profile})
 
 
 
-# def wishlist(request):
+def messages_page(request):
+    return render(request,'messages.html')
+
+
+# correct
+
+# from django.shortcuts import render, redirect, get_object_or_404
+# from django.contrib import messages
+# from .models import Product, UserProfile, UserAddress, CustomUser
+
+# def checkout(request):
 #     user = request.user
 #     try:
 #         # Attempt to retrieve the user's profile
@@ -1078,11 +1074,449 @@ def chat(request):
 #     except UserProfile.DoesNotExist:
 #         # If the profile does not exist, create a new one
 #         user_profile = UserProfile.objects.create(user=user)
-     
-#     return render(request,'wishlist.html',{'user_profile': user_profile})
+
+#     if request.method == 'GET':
+#         # Retrieve product information from query parameters
+#         product_id = request.GET.get('product_id')
+#         price = request.GET.get('price')
+#         product_name = request.GET.get('product_name')
+#         owner_id = request.GET.get('owner_id')
+        
+#         # Validate if all necessary parameters are provided
+#         if product_id and price and product_name and owner_id:
+#             # Retrieve the product object based on the product_id
+#             product = get_object_or_404(Product, pk=product_id)
+            
+#             # Retrieve the CustomUser instance associated with the owner
+#             owner = get_object_or_404(CustomUser, pk=owner_id)
+            
+#             # Retrieve the UserAddress associated with the owner
+#             try:
+#                 owner_address = UserAddress.objects.get(user=owner)
+#             except UserAddress.DoesNotExist:
+#                 owner_address = None
+
+#             # Pass user_profile, product, owner_address, and other necessary parameters to the template
+#             context = {
+#                 'user_profile': user_profile,
+#                 'product': product,
+#                 'price': price,
+#                 'product_name': product_name,
+#                 'owner_id': owner_id,
+#                 'product_id': product_id,
+#                 'owner_address': owner_address,
+#                 'image1_url': product.image1.url if product.image1 else None,
+#             }
+#             return render(request, 'checkout.html', context)
+#         else:
+#             # Redirect to some error page or display an error message
+#             messages.error(request, 'Invalid parameters provided for checkout.')
+#             return redirect('checkout')  # Update with appropriate URL
+#     else:
+#         # Handle POST requests if needed
+#         pass  # Add your POST request handling logic here if necessary
+
+from .models import UserProfile, UserAddress
+
+def checkout(request):
+    user = request.user
+    try:
+        # Attempt to retrieve the user's profile
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile.objects.create(user=user)
+
+    if request.method == 'GET':
+        # Retrieve product information from query parameters
+        product_id = request.GET.get('product_id')
+        price = request.GET.get('price')
+        product_name = request.GET.get('product_name')
+        owner_id = request.GET.get('owner_id')
+        
+        # Validate if all necessary parameters are provided
+        if product_id and price and product_name and owner_id:
+            # Retrieve the product object based on the product_id
+            product = get_object_or_404(Product, pk=product_id)
+            
+            # Retrieve the CustomUser instance associated with the owner
+            owner = get_object_or_404(CustomUser, pk=owner_id)
+            
+            # Retrieve the UserProfile associated with the owner
+            try:
+                owner_profile = UserProfile.objects.get(user=owner)
+                owner_name = f"{owner_profile.first_name} {owner_profile.last_name}"
+                # Retrieve owner's address
+                owner_address = UserAddress.objects.get(user=owner)
+            except UserProfile.DoesNotExist:
+                owner_name = "Unknown"
+                owner_address = None
+
+            # Retrieve logged-in user's address
+            user_address = UserAddress.objects.get(user=user)
+
+            # Pass user_profile, product, owner_name, owner_address, user_address, and other necessary parameters to the template
+            context = {
+                'user_profile': user_profile,
+                'product': product,
+                'price': price,
+                'product_name': product_name,
+                'owner_id': owner_id,
+                'owner_name': owner_name,
+                'product_id': product_id,
+                'image1_url': product.image1.url if product.image1 else None,
+                'owner_address': owner_address,
+                'user_address': user_address,
+            }
+            return render(request, 'checkout.html', context)
+        else:
+            # Redirect to some error page or display an error message
+            messages.error(request, 'Invalid parameters provided for checkout.')
+            return redirect('checkout')  # Update with appropriate URL
+    else:
+        # Handle POST requests if needed
+        pass  # Add your POST request handling logic here if necessary
+
+
+
+
+
+
+
+
+
 
 
 # views.py
-# views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import UserAddress
+
+def save_address(request):
+    if request.method == 'POST':
+        address = request.POST.get('address')
+        state = request.POST.get('state')
+        district = request.POST.get('district')
+        pincode = request.POST.get('pincode')
+
+        # Assuming the user is authenticated, retrieve the user object
+        user = request.user
+
+        # Check if the user already has an address
+        existing_address = UserAddress.objects.filter(user=user).first()
+
+        if existing_address:
+            # If an address already exists, update it
+            existing_address.address = address
+            existing_address.state = state
+            existing_address.district = district
+            existing_address.pincode = pincode
+            existing_address.save()
+            messages.success(request, 'Your address has been successfully updated!')
+        else:
+            # If no address exists, create a new one
+            UserAddress.objects.create(user=user, address=address, state=state, district=district, pincode=pincode)
+            messages.success(request, 'Your address has been successfully saved!')
+
+        # Fetch user's address to pass to the template
+        user_address = UserAddress.objects.filter(user=user).first()
+
+        # Redirect to the appliances.html page
+        return redirect('appliances')  # Replace 'appliances' with the name of your appliances page URL pattern
+
+    else:
+        # Fetch user's address to pass to the template
+        user_address = UserAddress.objects.filter(user=request.user).first()
+
+        # Render the template with the user_address object
+        return render(request, 'appliances.html', {'user_address': user_address})
+    
+
+    # correct one
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import FavoriteProduct
+
+@csrf_exempt
+def add_favorite(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        user = request.user  # Assuming user is authenticated
+        
+        # Check if the product is already favorited by the user
+        favorite_product = FavoriteProduct.objects.filter(user=user, product_id=product_id).first()
+        if favorite_product:
+            # If the product is already favorited, remove it from favorites
+            favorite_product.delete()
+            return JsonResponse({'success': False})  # Product removed from favorites
+        else:
+            # If the product is not favorited, add it to favorites
+            FavoriteProduct.objects.create(user=user, product_id=product_id)
+            return JsonResponse({'success': True})  # Product added to favorites
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+
+    # correct
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import FavoriteProduct
+
+def wishlist(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        try:
+            favorite_item = FavoriteProduct.objects.get(id=item_id)
+            favorite_item.delete()
+            return JsonResponse({'success': True})
+        except FavoriteProduct.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist.'})
+    else:
+        # Retrieve favorite items for the current user
+        favorite_items = FavoriteProduct.objects.filter(user=request.user)
+        return render(request, 'wishlist.html', {'favorite_items': favorite_items})
+
+
+
+from django.shortcuts import render
+from .models import UserProfile
+
+def success_page(request):
+   
+    # Pass user_profile and payment_id to the template
+    return render(request, 'success_page.html')
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from .models import Transaction, CustomUser, Product
+import json
+
+@csrf_exempt
+def store_transaction(request):
+    if request.method == 'POST':
+        # Parse the JSON data sent from the frontend
+        data = json.loads(request.body)
+        
+        # Extract data from the JSON object
+        user_id = data.get('user_id')
+        product_id = data.get('product_id')
+        price = data.get('price')
+
+        # Retrieve user and product objects from the database
+        user = get_object_or_404(CustomUser, pk=user_id)
+        product = get_object_or_404(Product, pk=product_id)
+
+        # Create a new Transaction object and save it to the database
+        transaction = Transaction.objects.create(user=user, product=product, price=price)
+
+
+       # Update the product status to ordered
+        product.ordered = True
+        product.save()
+
+
+         # Check if the product is ordered and update its status to "Sold Out"
+        if product.ordered:
+            product.status = "Sold Out"
+            product.save()
+        
+        # You can return a success response if needed
+        return JsonResponse({'success': True}) 
+    else:
+        # Handle other types of requests if needed
+        pass
+
+
+
+# from django.shortcuts import render
+# from .models import Transaction
+
+# def history(request):
+#     # Retrieve all transactions for the logged-in user
+#     transactions = Transaction.objects.filter(user=request.user)
+
+#     # Pass the transactions to the template
+#     return render(request, 'history.html', {'transactions': transactions})
+
+
+# ................................................correct one..............................................................
+# from django.shortcuts import render
+# from .models import Transaction, UserAddress
+
+# def history(request):
+#     # Retrieve all transactions for the logged-in user
+#     transactions = Transaction.objects.filter(user=request.user)
+
+#     # Retrieve the user's address
+#     user_address = UserAddress.objects.get(user=request.user)
+
+#     # Pass the transactions and user's address to the template
+#     return render(request, 'history.html', {'transactions': transactions, 'user_address': user_address})
+
+
+
+from django.shortcuts import render
+from .models import Transaction, UserAddress
+
+def history(request):
+    # Retrieve all transactions for the logged-in user
+    transactions = Transaction.objects.filter(user=request.user)
+
+    # Retrieve the user's address
+    user_address = UserAddress.objects.get(user=request.user)
+
+    # Pass the transactions and user's address to the template
+    return render(request, 'history.html', {'transactions': transactions, 'user_address': user_address})
+
+
+
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from django.utils import timezone
+
+def generate_pdf(request, product_id):
+    # Fetch the product based on the product_id
+    product = Product.objects.get(pk=product_id)
+
+    # Retrieve transactions for the product
+    transactions = Transaction.objects.filter(product=product)
+
+    # Fetch the logged-in user
+    user = request.user
+
+    # Fetch the user's address
+    user_address = user.user_address if hasattr(user, 'user_address') else None
+
+    # Create a response object
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{product.brand_name}_receipt.pdf"'
+
+    # Create a PDF document
+    doc = SimpleDocTemplate(response, pagesize=letter)
+
+    # Define styles
+    styles = getSampleStyleSheet()
+    style_heading = styles['Heading1']
+    style_body = styles['BodyText']
+    style_table_heading = [
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+    ]
+
+    # Define data for the table
+    data = [
+        [Paragraph('<b>Name</b>', style_body),
+         Paragraph('<b>Category</b>', style_body),
+         Paragraph('<b>Paid</b>', style_body),
+         Paragraph('<b>Date</b>', style_body)]
+    ]
+
+    # Add transaction details to the data
+    for transaction in transactions:
+        data.append([
+            transaction.product.brand_name,
+            transaction.product.category,
+            f'{transaction.price}',
+            transaction.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        ])
+
+    # Create the table
+    table = Table(data)
+    table.setStyle(TableStyle(style_table_heading))
+
+    # Create elements list and add headings
+    elements = [
+        Paragraph("<b>EasyTech Repairs</b>", style_heading),
+        Paragraph("<b>Receipt</b>", style_heading)  # Add both headings
+    ]
+
+    # Add space between headings and table
+    elements.append(Paragraph("<br/><br/>", style_body))
+
+    
+    
+    # Add user name on the right side
+    if user.is_authenticated:
+        elements.append(Paragraph(f"<p>Name: {user.username}</p>", style_body)),
+        elements.append(Paragraph("<br/>", style_body))
+                        
+        
+
+    # Add table to elements
+    elements.append(table)
+
+    # Add sentence below the table
+    elements.append(Paragraph("<br/>", style_body))
+    elements.append(Paragraph("<br/>", style_body))
+    elements.append(Paragraph("<br/>", style_body))
+    elements.append(Paragraph("This is a computer system generated receipt. Hence there is no need for a physical signature.", style_body))
+
+    # Build the PDF document
+    doc.build(elements)
+
+    return response
+
+
+
+
+# from django.http import JsonResponse
+# from django.shortcuts import get_object_or_404
+# from .models import Transaction
+
+# @csrf_exempt
+# def cancel_transaction(request, transaction_id):
+#     if request.method == 'POST':
+#         # Retrieve the Transaction object from the database
+#         transaction = get_object_or_404(Transaction, pk=transaction_id)
+
+#         # Update the refunded field of the transaction
+#         transaction.refunded = True
+#         transaction.save()
+
+#         # Return a success response
+#         return JsonResponse({'success': True}) 
+#     else:
+#         # Handle other types of requests if needed
+#         pass
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Transaction, Product
+
+@csrf_exempt
+def cancel_transaction(request, transaction_id):
+    if request.method == 'POST':
+        # Retrieve the Transaction object from the database
+        transaction = get_object_or_404(Transaction, pk=transaction_id)
+
+        # Update the refunded field of the transaction
+        transaction.refunded = True
+        transaction.save()
+
+        # Update the ordered field of the product associated with the cancelled transaction
+        product = transaction.product
+        product.ordered = False
+        product.save()
+
+        # Return a success response
+        return JsonResponse({'success': True}) 
+    else:
+        # Handle other types of requests if needed
+        pass
 
 
