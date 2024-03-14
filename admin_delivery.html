@@ -15,6 +15,7 @@
    
      <style>
       /* Add this CSS to your existing stylesheet or create a new one */
+      /* Add this CSS to your existing stylesheet or create a new one */
 
 .form-container {
   background: #fff;
@@ -22,6 +23,8 @@
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   margin: 20px;
+  max-width: 400px; /* Adjust the maximum width of the form container */
+  margin: 0 auto; /* Center the form container horizontally */
 }
 
 .form-group {
@@ -36,15 +39,19 @@
 }
 
 .form-group input {
-  width: 100%;
+  width: calc(100% - 20px); /* Adjust the width of the input fields */
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 6px;
 }
 
-/* Add this CSS to your existing stylesheet or create a new one */
+/* Adjust the styles for radio buttons */
+input[type="radio"] {
+  margin-right: 5px;
+}
 
+/* Adjust the styles for the submit button */
 #submitBtn {
   background: #0A2558;
   color: #fff;
@@ -54,12 +61,44 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease;
+  width: 100%; /* Make the submit button full width */
 }
 
 #submitBtn:hover {
   background: #081D45;
 }
 
+
+
+.messages {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0;
+}
+
+.messages li {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
 
 
      </style>
@@ -112,6 +151,13 @@
           </a>
         </li>
 
+        <li>
+          <a href="{% url 'admin_delivery'%}" class="active">
+            <i class='bx bx-user'></i>
+            <span class="links_name">Add</span>
+          </a>
+        </li>
+
 		
         <li class="log_out">
           <a href="{% url 'logout' %}" id="logout-link" style="color: white;">
@@ -133,38 +179,45 @@
     <br>
     <br>
 
+
+
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
     <!-- New form added here -->
     <div class="form-container">
 
-
-      {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
     
-      <form action="" method="post">
+      <form action="" method="post" id="registrationForm" onsubmit="return validateForm()">
           {% csrf_token %}
           <div class="form-group">
               <label for="username">Username:</label>
-              <input type="text" id="username" name="username" required>
+              <input type="text" id="username" name="username" required oninput="validateUsername()">
+              <span class="error" id="usernameError" style="color:red";></span><br>
           </div>
           
           <div class="form-group">
               <label for="email">Email:</label>
-              <input type="email" id="email" name="email" required>
+              <input type="email" id="email" name="email" required  oninput="validateEmail()">
+              <span class="error" id="emailError" style="color:red";></span><br>
           </div>
           
           <div class="form-group">
               <label for="password">Password:</label>
               <input type="password" id="password" name="password" required>
+              <span class="error" id="passwordError" style="color:red";></span><br>
           </div>
           
           <div class="form-group">
               <label for="confirmpassword">Confirm Password:</label>
               <input type="password" id="confirmpassword" name="confirmpassword" required>
+              <span class="error" id="confirmPasswordError" style="color:red";></span><br>
           </div>
 
           <input type="radio" id="Delivery" name="user_type" value="Delivery" required>
@@ -177,9 +230,116 @@
     
   </section>
 
- 
 
- 
+  <!-- <script>
+    function validateForm() {
+        var usernameInput = document.getElementById("username");
+        var usernameError = document.getElementById("usernameError");
+        var usernamePattern = /^[A-Z][a-zA-Z0-9]{0,9}$/;
+    
+        if (usernameInput.value === "") {
+            usernameError.textContent = "Username cannot be empty.";
+            return false; // Prevent form submission
+        } else if (!usernamePattern.test(usernameInput.value)) {
+            usernameError.textContent = "Username must start with a capital letter and can only contain uppercase letters followed by lowercase letters, characters, and numbers (maximum 10 characters).";
+            return false; // Prevent form submission
+        } else {
+            usernameError.textContent = "";
+            return true; // Allow form submission
+        }
+    }
+    
+    function validateUsername() {
+        var usernameInput = document.getElementById("username");
+        var usernameError = document.getElementById("usernameError");
+        var usernamePattern = /^[A-Z][a-zA-Z0-9]{0,9}$/;
+    
+        if (usernameInput.value === "") {
+            usernameError.textContent = "Username cannot be empty.";
+        } else if (!usernamePattern.test(usernameInput.value)) {
+            usernameError.textContent = "Username must start with a capital letter and can only contain uppercase letters followed by lowercase letters, characters, and numbers (maximum 10 characters).";
+        } else {
+            usernameError.textContent = "";
+        }
+    }
+
+
+
+
+    function validateEmail() {
+    var emailInput = document.getElementById("email");
+    var emailError = document.getElementById("emailError");
+    var emailValue = emailInput.value;
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (emailValue === "") {
+        emailError.textContent = "Email cannot be empty.";
+        return false;
+    } else if (/^\d/.test(emailValue)) {
+        emailError.textContent = "Email cannot start with a number.";
+        return false;
+    } else if (!emailPattern.test(emailValue)) {
+        emailError.textContent = "Invalid email format.";
+        return false;
+    } else {
+        emailError.textContent = "";
+        return true;
+    }
+}
+    </script> -->
+
+
+
+
+    <script>
+      function validateForm() {
+          var isUsernameValid = validateUsername();
+          var isEmailValid = validateEmail();
+          // Add validation for other fields as needed
+          return isUsernameValid && isEmailValid; // Only submit the form if all validations pass
+      }
+      
+      function validateUsername() {
+          var usernameInput = document.getElementById("username");
+          var usernameError = document.getElementById("usernameError");
+          var usernameValue = usernameInput.value;
+          var usernamePattern = /^[A-Z][a-zA-Z0-9]{0,9}$/;
+      
+          if (usernameValue === "") {
+              usernameError.textContent = "Username cannot be empty.";
+              return false;
+          } else if (!usernamePattern.test(usernameValue)) {
+              usernameError.textContent = "Username must start with a capital letter and can only contain uppercase letters followed by lowercase letters, characters, and numbers (maximum 10 characters).";
+              return false;
+          } else {
+              usernameError.textContent = "";
+              return true;
+          }
+      }
+      
+      function validateEmail() {
+          var emailInput = document.getElementById("email");
+          var emailError = document.getElementById("emailError");
+          var emailValue = emailInput.value;
+          var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+          if (emailValue === "") {
+              emailError.textContent = "Email cannot be empty.";
+              return false;
+          } else if (/^\d/.test(emailValue)) {
+              emailError.textContent = "Email cannot start with a number.";
+              return false;
+          } else if (!emailPattern.test(emailValue)) {
+              emailError.textContent = "Invalid email format.";
+              return false;
+          } else {
+              emailError.textContent = "";
+              return true;
+          }
+      }
+      </script>
+      
+
 </body>
 </html>
 

@@ -207,9 +207,21 @@ nav {
 
             <!-- Display Home and Services links for authenticated users -->
             <a href="{% url 'technician_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
-            <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a>
-            <a href="" class="nav-item nav-link active"></a>
-            <a href="" class="nav-item nav-link active"></a>
+            <!-- <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a> -->
+           
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="myProfileLink" style="color: black;">My Profile</a>
+                <div class="dropdown-menu bg-light border-0 m-0">
+                    <a href="{% url 'profile' %}" class="dropdown-item">Manage Profile</a>
+                    <a href="{% url 'application' %}" class="dropdown-item">Registration form</a>
+                    <a href="{% url 'order_details' %}" class="dropdown-item">order details</a>
+                    <a href="{% url 'change_password'%}" id="changePasswordLink" class="dropdown-item">change password</a>
+                    
+                    <!-- <a href="#" class="dropdown-item">View Details</a> -->
+              
+                </div>
+            </div>
+            <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
             
             <!-- Display Register and Login links for non-authenticated users -->
 

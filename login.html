@@ -79,7 +79,7 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required><br><br>
         
-        <input type="submit" value="Login">
+        <input type="submit" value="Login" id="loginButton">
     </form>
 
 
@@ -123,6 +123,17 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js'%}"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Disable the back button
+            window.history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                window.history.go(1);
+            };
+        });
+    </script>
 </body>
 
 </html>

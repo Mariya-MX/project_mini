@@ -130,6 +130,10 @@
 
 
 
+
+
+
+
       </style>
 
 </head>
@@ -166,7 +170,8 @@
                         <!-- Dropdown menu items -->
                         <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
                         <a class="dropdown-item" href="{% url 'sell_product_status' %}">product status</a>
-                        <a class="dropdown-item" href="">Wishlist</a>
+                        <a class="dropdown-item" href="{% url 'wishlist' %}">Wishlist</a>
+                        <a class="dropdown-item" href="{% url 'history' %}">History</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                     </div>
                 </div>    
@@ -177,7 +182,6 @@
                     <a href="{% url 'appliances' %}" class="text-decoration-none" style="color: #FFC300; font-size: 24px; font-weight: bold;"><b>Y</b></a>
                 </div>
                
-                
                   </div>
                       
                 </div>
@@ -213,10 +217,25 @@
     <!-- Navbar End -->
 
 
-  
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
 
-   <!-- Form Start -->
+
+
+
+
+<!--  -->
+
+
+
+     <!-- Form Start -->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -230,13 +249,13 @@
                 
                 <hr>
                 <div class="mb-3">
-                    <label for="brandName" class="form-label">Brand Name *</label>
+                    <label for="brandName" class="form-label" style="color: black;">Brand Name *</label>
                     <input type="text" class="form-control dark-border" id="brandName" name="brandName" required oninput="validateBrandName()">
                     <div id="brandNameValidation" style="color: red;"></div>
                 </div>
                 <br>
                 <div class="mb-3">
-                    <label for="category" class="form-label">Category *</label>
+                    <label for="category" class="form-label" style="color: black;">Category *</label>
                     <select class="form-select dark-border" id="category" name="category" required style="max-width: 400px;">
                         <option value="" selected disabled>Select Category</option>
                         <option value="bike">Bikes</option>
@@ -253,28 +272,34 @@
                 <br>
                 <hr>
                 <div class="mb-3">
-                    <label for="adtitle" class="form-label">Ad title *</label>
-                    <input type="text" class="form-control dark-border" id="adtitle" name="adtitle" required oninput="validateAdTitle()">
+                    <label for="adtitle" class="form-label" style="color: black;">Ad title *</label>
+                    <input type="text" class="form-control dark-border" id="adtitle" name="adtitle" required oninput="validateAdTitle()" >
                     <div id="adTitleValidation" style="color: red;"></div>
+                    <p style="font-size: 12px; color: #6c757d;">
+                        Mention the key features of your item (e.g.model,type)
+                    </p>
                 </div>
                 <br>
                 <hr>
                 <div class="mb-3">
-                    <label for="price" class="form-label">Price *</label>
+                    <label for="price" class="form-label" style="color: black;">Price *</label>
                     <input type="text" class="form-control dark-border" id="price" name="price" required oninput="validatePrice()">
                     <div id="priceValidation" style="color: red;"></div>
                 </div>
                 <br>
                 <hr>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Description *</label>
+                    <label for="description" class="form-label" style="color: black;">Description *</label>
                     <textarea class="form-control dark-border" id="description" name="description" required oninput="validateDescription()"></textarea>
                     <div id="descriptionValidation" style="color: red;"></div>
+                    <p style="font-size: 12px; color: #6c757d;">
+                        Include condition, features and reason for selling
+                    </p>
                 </div>
                 <br>
                 <hr>
                 <div class="mb-3">
-                    <label for="contact" class="form-label">Contact *</label>
+                    <label for="contact" class="form-label" style="color: black;">Contact *</label>
                     <input type="text" class="form-control dark-border" id="contact" name="contact" required oninput="validateContact()">
                     <div id="contactValidation" style="color: red;"></div>
                 </div>
@@ -288,26 +313,33 @@
                     <label for="images" class="form-label"><b  style="color: black;">UPLOAD UPTO 4 PHOTOS</b></label>
                     <div class="row">
                         <div class="col-md-2">
-                            <input type="file" id="image1" name="image1" accept="image/*" style="display: none;" onchange="displaySelectedImage(this, 'image1Label')">
+                            <input type="file" id="image1" name="image1" accept="image/jpeg,image/jpg" style="display: none;" onchange="displaySelectedImage(this, 'image1Label')">
                             <label for="image1" class="camera-icon" id="image1Label"><i class="fas fa-camera"></i></label>
+                            <span id="image1Error" style="color: red;"></span> 
                            
                         </div>
                         <div class="col-md-2">
-                            <input type="file" id="image2" name="image2" accept="image/*" style="display: none;" onchange="displaySelectedImage(this, 'image2Label')">
+                            <input type="file" id="image2" name="image2" accept="image/jpeg,image/jpg" style="display: none;" onchange="displaySelectedImage(this, 'image2Label')">
                             <label for="image2" class="camera-icon" id="image2Label"><i class="fas fa-camera"></i></label>
+                            <span id="image1Error" style="color: red;"></span> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2">
-                            <input type="file" id="image3" name="image3" accept="image/*" style="display: none;" onchange="displaySelectedImage(this, 'image3Label')">
+                            <input type="file" id="image3" name="image3" accept="image/jpeg,image/jpg" style="display: none;" onchange="displaySelectedImage(this, 'image3Label')">
                             <label for="image3" class="camera-icon" id="image3Label"><i class="fas fa-camera"></i></label>
+                            <span id="image1Error" style="color: red;"></span> 
                         </div>
                         <div class="col-md-2">
-                            <input type="file" id="image4" name="image4" accept="image/*" style="display: none;" onchange="displaySelectedImage(this, 'image4Label')">
+                            <input type="file" id="image4" name="image4" accept="image/jpeg,image/jpg" style="display: none;" onchange="displaySelectedImage(this, 'image4Label')">
                             <label for="image4" class="camera-icon" id="image4Label"><i class="fas fa-camera"></i></label>
+                            <span id="image1Error" style="color: red;"></span> 
                             
                         </div>
                     </div>
+                    <p style="font-size: 12px; color: red">
+                        This field is mandatory
+                    </p>
                 </div>
                 <hr>
                 <button type="submit" class="styled-button">Submit</button>
@@ -321,24 +353,56 @@
 </div>
 <!-- Form End -->
 <script>
-    function validateBrandName() {
-        var brandNameInput = document.getElementById('brandName');
-        var brandName = brandNameInput.value.trim();
+    // function validateBrandName() {
+    //     var brandNameInput = document.getElementById('brandName');
+    //     var brandName = brandNameInput.value.trim();
 
-        // Check if brand name is empty
-        if (brandName === '') {
-            document.getElementById('brandNameValidation').textContent = 'Brand name should not be empty';
-            brandNameInput.setCustomValidity('Brand name should not be empty');
-        }
-        // Check if brand name starts with a lowercase letter
-        else if (/^[a-z]/.test(brandName)) {
-            document.getElementById('brandNameValidation').textContent = 'Brand name must start with a capital letter';
-            brandNameInput.setCustomValidity('Brand name must start with a capital letter');
-        } else {
-            document.getElementById('brandNameValidation').textContent = '';
-            brandNameInput.setCustomValidity('');
-        }
+    //     // Check if brand name is empty
+    //     if (brandName === '') {
+    //         document.getElementById('brandNameValidation').textContent = 'Brand name should not be empty';
+    //         brandNameInput.setCustomValidity('Brand name should not be empty');
+    //     }
+    //     // Check if brand name starts with a lowercase letter
+    //     else if (/^[a-z]/.test(brandName)) {
+    //         document.getElementById('brandNameValidation').textContent = 'Brand name must start with a capital letter';
+    //         brandNameInput.setCustomValidity('Brand name must start with a capital letter');
+    //     } else {
+    //         document.getElementById('brandNameValidation').textContent = '';
+    //         brandNameInput.setCustomValidity('');
+    //     }
+    // }
+
+    function validateBrandName() {
+    var brandNameInput = document.getElementById('brandName');
+    var brandName = brandNameInput.value.trim();
+
+    // Check if brand name is empty
+    if (brandName === '') {
+        document.getElementById('brandNameValidation').textContent = 'Brand name should not be empty';
+        brandNameInput.setCustomValidity('Brand name should not be empty');
     }
+    // Check if brand name starts with a lowercase letter
+    else if (/^[a-z]/.test(brandName)) {
+        document.getElementById('brandNameValidation').textContent = 'Brand name must start with a capital letter';
+        brandNameInput.setCustomValidity('Brand name must start with a capital letter');
+    }
+    // Check if brand name starts with a special character or number
+    else if (/^[^A-Z]/.test(brandName)) {
+        document.getElementById('brandNameValidation').textContent = 'Brand name must start with a capital letter';
+        brandNameInput.setCustomValidity('Brand name must start with a capital letter');
+    }
+    // Check if brand name contains special characters
+    else if (!/^[A-Za-z0-9\s]+$/.test(brandName)) {
+        document.getElementById('brandNameValidation').textContent = 'Brand name should not contain special characters';
+        brandNameInput.setCustomValidity('Brand name should not contain special characters');
+    } else {
+        document.getElementById('brandNameValidation').textContent = '';
+        brandNameInput.setCustomValidity('');
+    }
+}
+
+
+
 
 
     function validateAdTitle() {
@@ -361,24 +425,50 @@
         }
 
 
-        function validatePrice() {
-            var priceInput = document.getElementById('price');
-            var price = priceInput.value.trim();
+        // function validatePrice() {
+        //     var priceInput = document.getElementById('price');
+        //     var price = priceInput.value.trim();
 
-            // Check if price is empty
-            if (price === '') {
-                document.getElementById('priceValidation').textContent = 'Price should not be empty';
-                priceInput.setCustomValidity('Price should not be empty');
-            }
-            // Check if price contains only numbers
-            else if (!/^\d+$/.test(price)) {
-                document.getElementById('priceValidation').textContent = 'Price should contain only numbers';
-                priceInput.setCustomValidity('Price should contain only numbers');
-            } else {
-                document.getElementById('priceValidation').textContent = '';
-                priceInput.setCustomValidity('');
-            }
-        }
+        //     // Check if price is empty
+        //     if (price === '') {
+        //         document.getElementById('priceValidation').textContent = 'Price should not be empty';
+        //         priceInput.setCustomValidity('Price should not be empty');
+        //     }
+        //     // Check if price contains only numbers
+        //     else if (!/^\d+$/.test(price)) {
+        //         document.getElementById('priceValidation').textContent = 'Price should contain only numbers';
+        //         priceInput.setCustomValidity('Price should contain only numbers');
+        //     } else {
+        //         document.getElementById('priceValidation').textContent = '';
+        //         priceInput.setCustomValidity('');
+        //     }
+        // }
+
+
+        function validatePrice() {
+    var priceInput = document.getElementById('price');
+    var price = priceInput.value.trim();
+
+    // Check if price is empty
+    if (price === '') {
+        document.getElementById('priceValidation').textContent = 'Price should not be empty';
+        priceInput.setCustomValidity('Price should not be empty');
+    }
+    // Check if price contains only numbers
+    else if (!/^\d+$/.test(price)) {
+        document.getElementById('priceValidation').textContent = 'Price should contain only numbers';
+        priceInput.setCustomValidity('Price should contain only numbers');
+    }
+    // Check if price exceeds 2 lakhs
+    else if (parseInt(price) > 100000) {
+        document.getElementById('priceValidation').textContent = 'Price should not exceed 2 lakhs';
+        priceInput.setCustomValidity('Price should not exceed 1 lakhs');
+    } else {
+        document.getElementById('priceValidation').textContent = '';
+        priceInput.setCustomValidity('');
+    }
+}
+
 
 
         function validateDescription() {
@@ -418,6 +508,28 @@
                 contactInput.setCustomValidity('');
             }
         }
+
+
+
+
+
+        function validateFileType(input, labelId) {
+        var file = input.files[0];
+        var label = document.getElementById(labelId);
+        var errorMessage = document.getElementById(labelId + 'Error');
+        var allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']; // Allowed image MIME types
+
+        if (file) {
+            if (allowedTypes.indexOf(file.type) === -1) {
+                errorMessage.textContent = 'Only JPG, JPEG, PNG, or GIF files are allowed.';
+                input.value = ''; // Clear the input field
+                label.textContent = ''; // Clear the label
+            } else {
+                errorMessage.textContent = '';
+                label.textContent = file.name; // Display the file name
+            }
+        }
+    }
 </script>
 
 <script>
@@ -457,6 +569,10 @@
             }
         }
     </script>
+
+
+
+ 
 
 </body>
 

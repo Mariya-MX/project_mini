@@ -121,25 +121,37 @@
     align-items: center; /* Align items vertically to center */
 }
 
+/* Modify the color of the "Chat with Seller" button */
 .chat-section .btn-primary {
     padding: 0.75rem 1.5rem; /* Add padding */
     font-size: 1rem; /* Add font size */
-    background-color: #007bff; /* Button background color */
-    border-color: #007bff; /* Button border color */
+    background-color:  #21618c; /* Change Button background color to #5dade2 */
+    border-color:  #21618c; /* Change Button border color to #5dade2 */
     color: #ffffff; /* Button text color */
     border-radius: 0.25rem; /* Add border-radius */
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Add transition */
 }
 
-.chat-section .btn-primary:hover {
-    background-color: #0056b3; /* Change background color on hover */
-    border-color: #0056b3; /* Change border color on hover */
+
+
+
+/* CSS for the "Buy" button */
+.btn-buy {
+    padding: 0.75rem 1.5rem; /* Add padding */
+    font-size: 1rem; /* Add font size */
+    background-color:  #6c3483; /* Button background color */
+    border-color:  #6c3483; /* Button border color */
+    color: #ffffff; /* Button text color */
+    border-radius: 0.25rem; /* Add border-radius */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Add transition */
+    min-width: 150px; /* Add min-width to ensure consistent width */
+    margin-left: 10px; /* Add margin to create distance between buttons */
 }
 
-
-
-
-
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 
       </style>
@@ -164,8 +176,18 @@
                 <a href="{% url 'customer_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
                 <a href="{% url 'services' %}" class="nav-item nav-link" style="color: black;">Our Services</a>
                 <a href="{% url 'booking' %}" class="nav-item nav-link" id="bookServiceLink" style="color: black;">Book Service</a>
-                <a href="{% url 'profile' %}" class="nav-item nav-link" id="" style="color: black;">My Profile</a>
-                <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a> 
+                <div class="dropdown" style="position:relative;">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <!-- Dropdown menu items -->
+                        <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                        <a class="dropdown-item" href="{% url 'sell_product_status' %}">product status</a>
+                        <a class="dropdown-item" href="">Wishlist</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>  
                
                        
                     </div>
@@ -278,12 +300,45 @@
                     </div>
                 </div>
                 
-                <!-- Chat with Seller section -->
-                <div class="card chat-section mt-3">
-                    <div class="card-body">
-                        <a href="{% url 'chat' %}" class="btn btn-primary">Chat with Seller</a>
-                    </div>
-                </div>
+                
+<!-- Chat with Seller section -->
+<!-- <div class="card chat-section mt-3">
+    <div class="card-body">
+        {% if user.is_authenticated %}
+            {% if user != product.owner %}
+                
+                <a href="{% url 'checkout' %}?product_id={{ product.id }}&price={{ product.price }}&product_name={{ product.ad_title }}&owner_id={{ product.owner_id }}" class="btn btn-buy ml-2" >Buy Now</a>
+            {% else %}
+                
+                <a href="{% url 'sell_product_status' %}" class="btn btn-primary">See Your Status</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div> -->
+
+
+
+<!-- Chat with Seller section -->
+<div class="card chat-section mt-3">
+    <div class="card-body">
+        {% if user.is_authenticated %}
+            {% if user != product.owner %}
+                <!-- Show the "Chat with Seller" and "Buy Now" buttons for users who are not the owner -->
+                <!-- <a href="" class="btn btn-primary">Chat with Seller</a> -->
+                <!-- <a href="{% url 'messages_page' %}" class="btn btn-primary">Chat with Seller</a> -->
+                <a href="{% url 'checkout' %}?product_id={{ product.id }}&price={{ product.price }}&product_name={{ product.ad_title }}&owner_id={{ product.owner_id }}" class="btn btn-buy ml-2 {% if product.ordered %}disabled{% endif %}" id="buy-now-button">Buy Now</a>
+            {% else %}
+                <!-- Show the "See Your Status" button for the owner of the product -->
+                <a href="{% url 'sell_product_status' %}" class="btn btn-primary">See Your Status</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
                 
     
             </div>
@@ -300,6 +355,9 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js'%}"></script>
+
+
+    
 
 </body>
 

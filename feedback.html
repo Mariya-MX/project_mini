@@ -242,8 +242,12 @@ button:hover {
     {% csrf_token %}
     <div class="feedback-container">
         <h2>Provide Your Feedback</h2>
+        <!-- <label for="feedback">Your Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="6" placeholder="Enter your feedback here..." required></textarea> -->
         <label for="feedback">Your Feedback:</label>
-        <textarea id="feedback" name="feedback" rows="6" placeholder="Enter your feedback here..." required></textarea>
+<textarea id="feedback" name="feedback" rows="6" placeholder="Enter your feedback here..." required></textarea>
+<span id="feedback_error" class="error-message"></span>
+
         <br>
         <button type="submit" onclick="showSuccessMessage()">Submit Feedback</button>
     </div>
@@ -255,6 +259,39 @@ button:hover {
         alert("Feedback submitted successfully!");
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to validate feedback
+        function validateFeedback(inputElement, errorElement) {
+            const feedbackValue = inputElement.value.trim();
+            let errorMessage = '';
+
+            // Check if the feedback contains only text
+            if (!/^[a-zA-Z\s]*$/.test(feedbackValue)) {
+                errorMessage = "Please enter valid text in your feedback.";
+            }
+
+            // Display the error message
+            errorElement.textContent = errorMessage;
+        }
+
+        // Get the feedback input element and its respective error span
+        const feedbackInput = document.getElementById('feedback');
+        const feedbackError = document.getElementById('feedback_error');
+
+        // Attach event listener for real-time validation
+        feedbackInput.addEventListener('input', function () {
+            validateFeedback(this, feedbackError);
+        });
+    });
+
+    // Function to show success message
+    function showSuccessMessage() {
+        alert("Feedback submitted successfully!");
+    }
+</script>
+
+
 
 
 </body>

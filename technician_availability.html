@@ -211,10 +211,16 @@ nav {
             <option value="FullDay">Full Day</option>
         </select>
 
-        <button type="submit">Submit</button>
+        <button type="submit" id="submitBtn">Submit</button>
         
        
     </form>
+
+    
+
+    <!-- Display submitted data -->
+    <div id="submittedData" style="margin-top: 20px;"></div>
+</div>
 </div>
 
 {% if availability_data %}

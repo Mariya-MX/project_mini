@@ -10,6 +10,7 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
+
     <!-- Favicon -->
     <link href="{% static 'img/favicon.ico'%}" rel="icon">
 
@@ -34,6 +35,12 @@
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="..." crossorigin="anonymous">
+
+
 
     
     <style>
@@ -89,42 +96,50 @@
         }
 
         .sidebar {
-        height: 100%;
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #f4f4f4;
-        padding-top: 20px;
-        padding-left: 20px;
-    }
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #ffffff; /* Change background color */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    padding-top: 20px;
+    padding-left: 20px;
+    font-family: Arial, sans-serif; /* Change font family */
+    border-right: 1px solid #e0e0e0; /* Add a border */
+    z-index: 1000; /* Ensure the sidebar stays on top */
+}
 
-    .sidebar h2 {
-        margin-bottom: 20px;
-    }
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: #333; /* Adjust heading color */
+    font-size: 1.2em; /* Increase font size */
+}
 
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .sidebar ul li {
-        padding: 8px 0;
-    }
+.sidebar ul li {
+    padding: 8px 0;
+}
 
-    .sidebar ul li input[type="checkbox"] {
-        margin-right: 10px; /* Add space between checkbox and label */
-    }
+.sidebar ul li input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer; /* Change cursor to pointer */
+}
 
-    .sidebar ul li label {
-        color: #333;
-    }
+.sidebar ul li label {
+    color: #555; /* Adjust label color */
+    cursor: pointer; /* Change cursor to pointer */
+}
 
-    .sidebar ul li label:hover {
-        color: #555;
-        cursor: pointer; /* Change cursor to pointer on hover */
-    }
+.sidebar ul li label:hover {
+    color: #007bff; /* Change color on hover */
+}
+
 
         .main-content {
             margin-left: 250px; /* Adjust the margin to match the width of the sidebar */
@@ -198,18 +213,132 @@
     position: relative; /* Positioning context for absolute positioning */
 }
 
-.favorite-icon {
+
+.location-button {
+    margin-left: 300px; /* Adjust the margin-left value as needed */
+}
+
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* Center the modal vertically */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%; /* Decrease the width of the modal */
+    max-width: 400px; /* Set maximum width for responsiveness */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 20px; /* Add spacing below the heading */
+}
+
+input[type="text"] {
+    width: calc(100% - 20px); /* Adjust input width */
+    margin-bottom: 10px; /* Add spacing between inputs */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    width: 100%; /* Make the button full width */
+    padding: 10px;
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Button background color on hover */
+}
+
+
+
+.search-container {
+    position: relative;
+    margin: 20px auto; /* Adjust margin as needed */
+    width: 500px; /* Adjust width as needed */
+}
+
+.search-bar {
+    width: 90%; /* Adjust width as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+/* Heart icon */
+.heart-icon {
     position: absolute;
     top: 10px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
-    color: white; /* Adjust the color as needed */
-    z-index: 1; /* Ensure it's above other elements */
-    text-decoration: none; /* Remove underline */
+    z-index: 1;
 }
 
-.favorite-icon i {
-    font-size: 24px; /* Adjust the size as needed */
+/* Adjustments to make the heart icon look better */
+.heart-icon i {
+    color: white; /* Change the color as needed */
+    font-size: 20px; /* Change the size as needed */
 }
+
+
+/* Add this CSS to your existing stylesheet */
+.image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ribbon {
+    position: absolute;
+    top: 10px;
+    left: -30px;
+    width: 120px;
+    height: 30px;
+    background-color: #a0b8d1; /* Ribbon color */
+    transform: rotate(-45deg);
+}
+
+.ribbon::before {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border-style: solid;
+    border-width: 0 30px 30px 0;
+    border-color: transparent #a0b8d1 transparent transparent;
+}
+    
+.ribbon::after {
+    
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    color: white; /* Text color */
+    font-weight: bold;
+    transform: rotate(45deg);
+}
+
 
 
       </style>
@@ -241,7 +370,8 @@
                         <!-- Dropdown menu items -->
                         <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
                         <a class="dropdown-item" href="{% url 'sell_product_status' %}">product status</a>
-                        <a class="dropdown-item" href="">Wishlist</a>
+                        <a class="dropdown-item" href="{% url 'wishlist' %}">Wishlist</a>
+                        <a class="dropdown-item" href="{% url 'history' %}">History</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                     </div>
                 </div>  
@@ -288,29 +418,137 @@
         </div>
          
     </nav> 
-    <!-- Navbar End -->
-    <br><br>
+    
+    <!-- Your HTML template with the location form -->
+    <div class="location-button">
+        <button id="location-button"><i class="fas fa-map-marker-alt"></i> Location</button>
+    </div>
+    
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h5>{% if user_address %} Edit Your Address {% else %} Enter your location {% endif %}</h5>
+            <form id="locationForm" method="post" action="{% url 'save_address' %}">
+                {% csrf_token %}
+                <input type="text" id="address" name="address" placeholder="Enter your address..." value="{% if user_address %}{{ user_address.address }}{% endif %}">
+                <input type="text" id="state" name="state" placeholder="State" value="{% if user_address %}{{ user_address.state }}{% endif %}">
+                <input type="text" id="district" name="district" placeholder="District" value="{% if user_address %}{{ user_address.district }}{% endif %}">
+                <input type="text" id="pincode" name="pincode" placeholder="Pincode" value="{% if user_address %}{{ user_address.pincode }}{% endif %}">
+                
+                <button type="submit" id="saveLocation">Save</button>
+            </form>
+        </div>
+    </div>
+    
+
+    
+    <script>
+        // Get the location button
+        var locationButton = document.getElementById("location-button");
+        
+        // Get the modal
+        var locationModal = document.getElementById("locationModal");
+        
+        // Get the <span> element that closes the modal
+        var closeBtn = document.getElementsByClassName("close")[0];
+        
+        // When the user clicks the location button, display the modal
+        locationButton.onclick = function() {
+            locationModal.style.display = "block";
+        }
+        
+        // When the user clicks on <span> (x), close the modal
+        closeBtn.onclick = function() {
+            locationModal.style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == locationModal) {
+                locationModal.style.display = "none";
+            }
+        }
+    </script>
+
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show p-2" role="alert" style="font-size: 14px; width: 50%; margin-left: 500px;">
+        <strong>Success!</strong>
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+
+
+  
+
+<!-- Search Box -->
+
+<div class="search-container">
+    <input type="text" id="search-bar" class="search-bar" placeholder="Search products....">
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to filter products based on the search query
+        function filterProducts(searchQuery) {
+            $(".product-item").hide(); // Hide all products initially
+            $(".product-item").each(function () {
+                var brandName = $(this).find(".card-title").text().toLowerCase();
+                var category = $(this).data("category").toLowerCase();
+                var adTitle = $(this).find(".card-text").text().toLowerCase();
+
+                // Check if any part of the product matches the search query
+                if (brandName.includes(searchQuery) || category.includes(searchQuery) || adTitle.includes(searchQuery)) {
+                    $(this).show(); // Show the product if it matches the search query
+                }
+            });
+        }
+
+        // Event listener for the search button click
+        $('#search-button').on('click', function () {
+            const searchValue = $('#search-bar').val().toLowerCase();
+            filterProducts(searchValue);
+        });
+
+        // Event listener for typing into the search bar
+        $('#search-bar').on('input', function () {
+            const searchValue = $(this).val().toLowerCase();
+            filterProducts(searchValue);
+        });
+    });
+</script>
+
 
 
     <!-- Left Sidebar -->
 
 
- <!-- Left Sidebar -->
+<!-- Left Sidebar -->
 <div class="sidebar">
     <br><br><br>
     <h2>Category</h2>
     <!-- Add your category details or links here -->
     <ul>
-        <li><input type="checkbox" id="category-all" name="category" value="all" onchange="filterProducts(this)"><label for="category-all"> All</label></li>
-        <li><input type="checkbox" id="category-bike" name="category" value="bike" onchange="filterProducts(this)"><label for="category-bike"> Bikes</label></li>
-        <li><input type="checkbox" id="category-electronics" name="category" value="electronics" onchange="filterProducts(this)"><label for="category-electronics"> Electronics</label></li>
-        <li><input type="checkbox" id="category-mobile" name="category" value="mobile" onchange="filterProducts(this)"><label for="category-mobile"> Mobile</label></li>
-        <li><input type="checkbox" id="category-tablet" name="category" value="tablet" onchange="filterProducts(this)"><label for="category-tablet"> Tablet</label></li>
-        <li><input type="checkbox" id="category-laptop" name="category" value="laptop" onchange="filterProducts(this)"><label for="category-laptop"> Laptop</label></li>
-        <li><input type="checkbox" id="category-kitchen" name="category" value="kitchen" onchange="filterProducts(this)"><label for="category-kitchen"> Kitchen Appliances</label></li>
+        <li><input type="checkbox" id="category-all" name="category" value="all" onchange="filterProducts()"><label for="category-all"> All</label></li>
+        <li><input type="checkbox" id="category-bike" name="category" value="bike" onchange="filterProducts()"><label for="category-bike"> Bikes</label></li>
+        <li><input type="checkbox" id="category-electronics" name="category" value="electronics" onchange="filterProducts()"><label for="category-electronics"> Electronics</label></li>
+        <li><input type="checkbox" id="category-mobile" name="category" value="mobile" onchange="filterProducts()"><label for="category-mobile"> Mobile</label></li>
+        <li><input type="checkbox" id="category-tablet" name="category" value="tablet" onchange="filterProducts()"><label for="category-tablet"> Tablet</label></li>
+        <li><input type="checkbox" id="category-laptop" name="category" value="laptop" onchange="filterProducts()"><label for="category-laptop"> Laptop</label></li>
+        <li><input type="checkbox" id="category-kitchen" name="category" value="kitchen" onchange="filterProducts()"><label for="category-kitchen"> Kitchen Appliances</label></li>
         <!-- Add more categories as needed -->
     </ul>
 </div>
+
+
+
+
+
 
 <!-- Main Content -->
 <div class="main-content">
@@ -322,19 +560,28 @@
                 <div class="product-card">
                     <a href="{% url 'appliance_sub' product.id %}">
                         <img src="{{ product.image1.url }}" class="card-img-top" alt="Product Image 1">
+                        <!-- booked  -->
+                        {% if product.ordered %}
+                                <div class="ribbon" style="color: black;">sold out</div>
+                            {% endif %}
+
+
+   
                     </a>
-                    <!-- Heart-shaped icon -->
-        <a href="#" class="favorite-icon">
-            <i class="fas fa-heart"></i>
-        </a>
+                    <span class="heart-icon" data-product-id="{{ product.id }}"><i class="fas fa-heart"></i></span> <!-- Heart icon -->
+                    
                    
+                  
+    
                     <div class="card-body">
-                        
-                        
                         <h5 class="card-title">{{ product.brand_name }}</h5>
                         <p class="card-text">{{ product.ad_title }}</p>
                         <p class="card-text">₹{{ product.price }}</p>
                         <span class="posted-date">{{ product.date_added }}</span>
+
+
+
+
                         <!-- Add other details you want to display -->
                     </div>
                 </div>
@@ -344,28 +591,126 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    function filterProducts(checkbox) {
-        var category = checkbox.value;
-        var productItems = document.querySelectorAll('.product-item');
+    $(document).ready(function() {
+        // Function to update heart icon color based on favorite status
+        function updateHeartIconColor(productId) {
+            var heartIcon = $('.heart-icon[data-product-id="' + productId + '"]');
+            var isFavorite = localStorage.getItem('favorite_' + productId);
+            if (isFavorite === 'true') {
+                heartIcon.find('i').css('color', 'black');
+            } else {
+                heartIcon.find('i').css('color', 'white');
+            }
+        }
+        
+        // Update heart icon color on page load
+        $('.heart-icon').each(function() {
+            var productId = $(this).data('product-id');
+            updateHeartIconColor(productId);
+        });
 
-        if (category === 'all') {
-            productItems.forEach(function(item) {
-                item.style.display = 'block';
-            });
-        } else {
-            productItems.forEach(function(item) {
-                if (item.getAttribute('data-category') === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+        // Add click event listener for heart icon
+        $('.heart-icon').on('click', function() {
+            var productId = $(this).data('product-id');
+            var heartIcon = $(this);
+            
+            // Send AJAX request to add or remove product from favorites
+            $.ajax({
+                url: '/add_favorite/',
+                type: 'POST',
+                data: {
+                    'product_id': productId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    // Handle success response
+                    if (response.success) {
+                        // If product is added to favorites, change heart icon color to black
+                        heartIcon.find('i').css('color', 'black');
+                        localStorage.setItem('favorite_' + productId, 'true');
+                        alert('Product added to favorites!');
+                    } else {
+                        // If product is removed from favorites, change heart icon color to white
+                        heartIcon.find('i').css('color', 'white');
+                        localStorage.setItem('favorite_' + productId, 'false');
+                        alert('Product removed from favorites!');
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
                 }
             });
-        }
-    }
+        });
+
+        // Add click event listener for delete button
+        $('.delete-icon').on('click', function() {
+            var itemId = $(this).closest('.card').data('item-id');
+            $.ajax({
+                url: '/wishlist/delete/',
+                type: 'POST',
+                data: {
+                    'item_id': itemId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // If deletion is successful, remove the card from the wishlist
+                        $('[data-item-id="' + itemId + '"]').remove();
+                        updateHeartIconColor(productId); // Update heart icon color
+                    } else {
+                        // Handle the case where deletion is not successful
+                        alert('Failed to delete item.');
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+    });
 </script>
 
 
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- JavaScript to handle category filtering -->
+<script>
+    function filterProducts() {
+    var selectedCategories = [];
+    // Get all checked categories
+    $("input[name='category']:checked").each(function() {
+        selectedCategories.push($(this).val());
+    });
+    // If no categories are selected, show all products
+    if (selectedCategories.length === 0 || selectedCategories.includes("all")) {
+        $(".product-item").show();
+    } else {
+        // Hide all products
+        $(".product-item").hide();
+        // Show products belonging to selected categories
+        selectedCategories.forEach(function(category) {
+            $(".product-item[data-category*='" + category + "']").show();
+        });
+    }
+}
+
+</script>
 
 
     <!-- JavaScript to handle the click event -->
@@ -393,6 +738,7 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js'%}"></script>
+
 
 </body>
 

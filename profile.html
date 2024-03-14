@@ -190,6 +190,7 @@ nav {
     color: #fff; /* Change the text color to white or a contrasting color */
 }
 
+
   </style>
 </head>
 
@@ -211,6 +212,9 @@ nav {
                 <!-- Display Home and Services links for authenticated users -->
                 <a href="{% url 'customer_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
                 <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a>
+                <a href="{% url 'booking' %}" class="nav-item nav-link" id="bookServiceLink" style="color: black;">Book Service</a>
+                <a href="{% url 'profile' %}" class="nav-item nav-link" id="" style="color: black;">My Profile</a>
+                <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
                 <a href="" class="nav-item nav-link active"></a>
                 <a href="" class="nav-item nav-link active"></a>
                 
@@ -251,7 +255,7 @@ nav {
 
                             <hr>
 
-                            <label for="first-name" class="label">First Name</label>
+                            <!-- <label for="first-name" class="label">First Name</label>
                             <input type="text" name="first_name" id="first-name" class="form-control" value="{% if user_profile.first_name %}{{ user_profile.first_name }}{% endif %}" {% if not user_profile.first_name %}required{% endif %} readonly>
                             <hr>
 
@@ -261,11 +265,30 @@ nav {
 
                             <label for="mobile" class="label">Mobile Number</label>
                             <input type="text" name="mobile" id="mobile" class="form-control" value="{% if user_profile.mobile %}{{ user_profile.mobile }}{% endif %}" {% if not user_profile.mobile %}required{% endif %} readonly>
-                            <hr>
+                            <hr> -->
+                            <label for="first-name" class="label">First Name</label>
+<input type="text" name="first_name" id="first_name" class="form-control" value="{% if user_profile.first_name %}{{ user_profile.first_name }}{% endif %}" {% if not user_profile.first_name %}required{% endif %}>
+<span id="first_name_error" class="error"></span>
+<hr>
 
-                            <label for="address" class="label">Address</label>
+<label for="last-name" class="label">Last Name</label>
+<input type="text" name="last_name" id="last_name" class="form-control" value="{% if user_profile.last_name %}{{ user_profile.last_name }}{% endif %}" {% if not user_profile.last_name %}required{% endif %}>
+<span id="last_name_error" class="error"></span>
+<hr>
+
+<label for="mobile" class="label">Mobile Number</label>
+<input type="text" name="mobile" id="number" class="form-control" value="{% if user_profile.mobile %}{{ user_profile.mobile }}{% endif %}" {% if not user_profile.mobile %}required{% endif %}>
+<span id="number_error" class="error"></span><br>
+<label for="address" class="label">Address</label>
+<input type="text" name="address" id="address" class="form-control" value="{% if user_profile.address %}{{ user_profile.address }}{% endif %}" {% if not user_profile.address %}required{% endif %}>
+<span id="address_error" class="error"></span>
+<hr>
+
+
+
+                            <!-- <label for="address" class="label">Address</label>
                             <input type="text" name="address" id="address" class="form-control" value="{% if user_profile.address %}{{ user_profile.address }}{% endif %}" {% if not user_profile.address %}required{% endif %} readonly>
-                            <hr>
+                            <hr> -->
 
                             <div class="form-group">
                                 {% if created %}
@@ -308,6 +331,127 @@ nav {
             document.getElementById('edit-button').style.display = readOnly ? 'block' : 'none';
         }
     </script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to validate the first and last name
+        function validateNameInput(inputElement, errorElement) {
+            const inputValue = inputElement.value.trim();
+            let errorMessage = '';
+
+            // Check if the input contains only alphabetic characters
+            if (!/^[a-zA-Z]+$/.test(inputValue)) {
+                errorMessage = "Please enter only alphabetic characters.";
+            }
+
+            // Check if the first letter is capitalized
+            if (!/^[A-Z]/.test(inputValue)) {
+                errorMessage = "Name should start with a capital letter.";
+            }
+
+            // Check for name length constraints
+            const minLength = 2; // Minimum length
+            const maxLength = 30; // Maximum length
+            if (inputValue.length < minLength || inputValue.length > maxLength) {
+                errorMessage = `Name should be between ${minLength} and ${maxLength} characters.`;
+            }
+
+            // Display the error message under the input field with red color
+            errorElement.textContent = errorMessage;
+            errorElement.style.color = 'red';
+        }
+
+        // Function to validate the phone number
+        function validatePhoneNumber(inputElement, errorElement) {
+            const phoneNumber = inputElement.value.trim();
+            let errorMessage = '';
+
+            // Check if the phone number contains only numeric characters
+            if (!/^\d+$/.test(phoneNumber)) {
+                errorMessage = "Please enter a valid numeric phone number.";
+            }
+
+            // Check for phone number length constraints
+            const expectedLength = 10; // Expected length
+            if (phoneNumber.length !== expectedLength) {
+                errorMessage = `Phone number should be exactly ${expectedLength} digits.`;
+            }
+
+            // Check for leading zeros
+            if (phoneNumber.length > 1 && phoneNumber[0] === '0') {
+                errorMessage = "Avoid leading zeros in the phone number.";
+            }
+
+            // Check for valid prefixes (customize as needed)
+            const validPrefixes = ['9', '8', '7', '6']; // Example valid prefixes
+            if (!validPrefixes.includes(phoneNumber.substring(0, 1))) {
+                errorMessage = "Invalid phone number prefix.";
+            }
+
+            // Display the error message under the input field with red color
+            errorElement.textContent = errorMessage;
+            errorElement.style.color = 'red';
+        }
+
+        // Function to validate the address field
+        function validateAddressInput(inputElement, errorElement) {
+            const addressValue = inputElement.value.trim();
+            let errorMessage = '';
+
+            // Not Empty: Ensure that the address field is not left empty
+            if (addressValue === '') {
+                errorMessage = "Please enter your address.";
+            }
+
+            // Character Restrictions: Allowing alphanumeric characters, spaces, commas, and other necessary punctuation marks
+            // You can customize the regular expression based on your specific character requirements
+            const allowedCharactersRegex = /^[a-zA-Z0-9\s\-,.]+$()/;
+            if (!allowedCharactersRegex.test(addressValue)) {
+                errorMessage = "Please use only alphanumeric characters, spaces, commas, and hyphens in your address.";
+            }
+
+            // Length Constraints: Set a minimum and maximum length for the address field
+            const minLength = 15; // Minimum length
+            const maxLength = 100; // Maximum length
+            if (addressValue.length < minLength || addressValue.length > maxLength) {
+                errorMessage = `Address should be between ${minLength} and ${maxLength} characters.`;
+            }
+
+            // Display the error message under the address input field with red color
+            errorElement.textContent = errorMessage;
+            errorElement.style.color = 'red';
+        }
+
+        // Get the first name, last name, phone number, and address input elements and their respective error spans
+        const firstNameInput = document.getElementById('first_name');
+        const lastNameInput = document.getElementById('last_name');
+        const phoneNumberInput = document.getElementById('number');
+        const addressInput = document.getElementById('address');
+
+        const firstNameError = document.getElementById('first_name_error');
+        const lastNameError = document.getElementById('last_name_error');
+        const phoneNumberError = document.getElementById('number_error');
+        const addressError = document.getElementById('address_error');
+
+        // Attach event listeners for real-time validation
+        firstNameInput.addEventListener('input', function () {
+            validateNameInput(this, firstNameError);
+        });
+
+        lastNameInput.addEventListener('input', function () {
+            validateNameInput(this, lastNameError);
+        });
+
+        phoneNumberInput.addEventListener('input', function () {
+            validatePhoneNumber(this, phoneNumberError);
+        });
+
+        addressInput.addEventListener('input', function () {
+            validateAddressInput(this, addressError);
+        });
+    });
+</script>
+
+    
 </body>
 
         

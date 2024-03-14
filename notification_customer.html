@@ -200,6 +200,9 @@ input {
                 <!-- Display Home and Services links for authenticated users -->
                 <a href="{% url 'customer_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
                 <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a>
+                <a href="{% url 'booking' %}" class="nav-item nav-link" id="bookServiceLink" style="color: black;">Book Service</a>
+                <a href="{% url 'profile' %}" class="nav-item nav-link" id="" style="color: black;">My Profile</a>
+                <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
                 <a href="" class="nav-item nav-link active"></a>
                 <a href="" class="nav-item nav-link active"></a>
                 

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <!-- Add CSS styles for the PDF if necessary -->
+</head>
+<body>
+    <h1>Receipt</h1>
+    <p><strong>Payment ID:</strong> {{ payment.id }}</p>
+    <p><strong>User:</strong> {{ payment.user }}</p>
+    <p><strong>Product:</strong> {{ payment.product }}</p>
+    <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
+    <p><strong>Date:</strong> {{ current_date }}</p>
+</body>
+</html>

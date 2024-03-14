@@ -1,0 +1,496 @@
+<!-- <h2>User Address</h2>
+{% if user_address %}
+    <p><strong>Address:</strong> {{ user_address.address }}</p>
+    <p><strong>State:</strong> {{ user_address.state }}</p>
+    <p><strong>District:</strong> {{ user_address.district }}</p>
+    <p><strong>Pincode:</strong> {{ user_address.pincode }}</p>
+{% else %}
+    <p>No address found for the user.</p>
+{% endif %}
+
+<h2>Transaction History</h2>
+{% if transactions %}
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <p><strong>User:</strong> {{ transaction.user.username }}</p>
+                <p><strong>Product:</strong> {{ transaction.product.owner.username }}</p>
+                <p><strong>Price:</strong> ₹{{ transaction.price }}</p>
+                <p><strong>product</strong> {{ transaction.product }}</p>
+                <p><strong>Timestamp:</strong> {{ transaction.timestamp }}</p>
+                <p><strong>Product:</strong> {{ transaction.product.brand_name }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions found.</p>
+{% endif %} -->
+
+<!-- new  one -->
+<!-- .............................................................................................................................. -->
+
+<!-- <h2>User Address</h2>
+{% if user_address %}
+    <p><strong>Address:</strong> {{ user_address.address }}</p>
+    <p><strong>State:</strong> {{ user_address.state }}</p>
+    <p><strong>District:</strong> {{ user_address.district }}</p>
+    <p><strong>Pincode:</strong> {{ user_address.pincode }}</p>
+{% else %}
+    <p>No address found for the user.</p>
+{% endif %}
+
+<h2>Transaction History</h2>
+{% if transactions %}
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <p><strong>User:</strong> {{ transaction.user.username }}</p>
+                <p><strong>owner:</strong> {{ transaction.product.owner.username }}</p>
+                <p><strong>Product Owner's Address:</strong> 
+                    {% with product_owner_address=transaction.product.owner.useraddress_set.first %}
+                        {% if product_owner_address %}
+                            {{ product_owner_address.address }}, {{ product_owner_address.state }}, {{ product_owner_address.district }}, {{ product_owner_address.pincode }}
+                        {% else %}
+                            No address found for the product owner.
+                        {% endif %}
+                    {% endwith %}
+                </p>
+                <p><strong>Product:</strong> {{ transaction.product.brand_name }}</p>
+                <p><strong>Price:</strong> ₹{{ transaction.price }}</p>
+                <p><strong>Timestamp:</strong> {{ transaction.timestamp }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions found.</p>
+{% endif %}
+
+ -->
+
+
+
+ {% load static %}
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="utf-8">
+     <title>AirCon - AC Repair Website Template</title>
+     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+     <meta content="" name="keywords">
+     <meta content="" name="description">
+ 
+     <!-- Favicon -->
+     <link href="{% static 'img/favicon.ico'%}" rel="icon">
+ 
+     <!-- Google Web Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
+ 
+     <!-- Icon Font Stylesheet -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+ 
+     <!-- Libraries Stylesheet -->
+     <link href="{% static 'lib/animate/animate.min.css'%}" rel="stylesheet">
+     <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css'%}" rel="stylesheet">
+ 
+     <!-- Customized Bootstrap Stylesheet -->
+     <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+ 
+     <!-- Template Stylesheet -->
+     <link href="{% static 'css/style.css'%}" rel="stylesheet">
+ 
+ 
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+ 
+     
+     <style>
+         .profile-picture-round {
+           width: 40px; /* Adjust the size as needed */
+           height: 40px; /* Adjust the size as needed */
+           border-radius: 50%;
+           overflow: hidden;
+           position: relative;
+         }
+     
+         .profile-picture-round img {
+           width: 90%;
+           height: 90%;
+           object-fit: cover;
+           border-radius: 50%;
+         }
+ 
+ 
+ 
+ 
+         .sell-btn {
+   background-color: #FF6B6B; /* Vibrant Red */
+   border: none;
+   color: white;
+   padding: 10px 20px;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   font-size: 16px;
+   border-radius: 30px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+ }
+ 
+ .sell-btn:hover {
+   background-color: #FF5252; /* Darker Red */
+ }
+ 
+ .sell-icon {
+   margin-right: 5px;
+ }
+ 
+ /* Style the table */
+ table {
+   width: 100%;
+   border-collapse: collapse;
+   border-spacing: 0;
+   margin-bottom: 20px; /* Add some margin at the bottom */
+ }
+ 
+ /* Style the table header */
+ th {
+   background-color: #f2f2f2; /* Light gray background */
+   color: #333; /* Dark text color */
+   font-weight: bold; /* Bold text */
+   padding: 10px; /* Add some padding */
+   text-align: left; /* Left align text */
+ }
+ 
+ /* Style the table rows */
+ td {
+   border-bottom: 1px solid #ddd; /* Add a bottom border */
+   padding: 10px; /* Add some padding */
+ }
+ 
+ /* Style alternate rows with a different background color */
+ tr:nth-child(even) {
+   background-color: #f9f9f9; /* Light gray background for even rows */
+ }
+ 
+ /* Style images inside table cells */
+ td img {
+   max-width: 100px; /* Limit image width to 100 pixels */
+   height: auto; /* Maintain aspect ratio */
+   display: block; /* Ensure images are displayed as blocks */
+   margin: 0 auto; /* Center align images horizontally */
+ }
+ 
+ 
+ 
+ /* Popup container */
+ .popup {
+     display: none;
+     position: fixed;
+     z-index: 999;
+     padding-top: 100px;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgb(0,0,0);
+     background-color: rgba(0,0,0,0.9);
+ }
+ 
+ /* Popup content */
+ .popup-content {
+     margin: auto;
+     display: block;
+     width: 80%;
+     max-width: 700px;
+ }
+ 
+ /* Close button */
+ .close {
+     position: absolute;
+     top: 15px;
+     right: 35px;
+     color: #f1f1f1;
+     font-size: 40px;
+     font-weight: bold;
+     transition: 0.3s;
+ }
+ 
+ .close:hover,
+ .close:focus {
+     color: #bbb;
+     text-decoration: none;
+     cursor: pointer;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+       </style>
+ 
+ </head>
+ <body>
+     <!-- Spinner Start -->
+     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+         <div class="spinner-grow text-primary" role="status"></div>
+     </div>
+     <!-- Spinner End -->
+ 
+       <!-- Navbar Start -->
+       <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5">
+         <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center">
+             <h6 class="m-0"><img class="img-fluid me-3" src="{% static 'img/icon/icon-02-primary.png'%}" alt="">EasyTech Repairs</h6>
+         </a>
+         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+             <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarCollapse">
+             <div class="navbar-nav mx-auto bg-light pe-4 py-3 py-lg-0">
+                  
+                 <!-- <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>  -->
+                 <a href="#" class="nav-item nav-link"></a>
+                 <a href="{% url 'customer_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
+                 <a href="{% url 'services' %}" class="nav-item nav-link" style="color: black;">Our Services</a>
+                 <a href="{% url 'booking' %}" class="nav-item nav-link" id="bookServiceLink" style="color: black;">Book Service</a>
+                 <!-- <a href="{% url 'profile' %}" class="nav-item nav-link" id="" style="color: black;">My Profile</a>
+                 <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>  -->
+                 <div class="dropdown" style="position:relative;">
+                     <a class="nav-link dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
+                         Profile
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                         <!-- Dropdown menu items -->
+                         <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                         <a class="dropdown-item" href="{% url 'sell_product_status' %}">product status</a>
+                         <a class="dropdown-item" href="{% url 'wishlist' %}">Wishlist</a>
+                         <a class="dropdown-item" href="{% url 'history' %}">History</a>
+                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                     </div>
+                 </div>    
+                 </div>
+ 
+                 <div style="margin-right: 50px;">
+                     <a href="{% url 'appliances' %}" class="text-decoration-none" style="color: #FF5733; font-size: 24px; font-weight: bold;"><b>B</b></a>
+                     <a href="{% url 'appliances' %}" class="text-decoration-none" style="color: #DAF7A6; font-size: 24px; font-weight: bold;"><b>U</b></a>
+                     <a href="{% url 'appliances' %}" class="text-decoration-none" style="color: #FFC300; font-size: 24px; font-weight: bold;"><b>Y</b></a>
+                 </div>
+                
+                 
+                   </div>
+                       
+                 </div>
+                
+             </div>
+             
+         </div>
+         <a href="{% url 'sell' %}">
+             <button class="btn sell-btn">
+               <svg class="sell-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                 <path d="M8 1.5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5zM1.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zM8 14.5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 1 0v5a.5.5 0 0 1-.5.5zM14.5 8a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5z"/>
+               </svg>
+               Sell
+             </button>
+           </a>
+ 
+ 
+         <!-- Notification icon -->
+ <a href="{% url 'notification_customer' %}" class="nav-item nav-link" style="color: black;">
+     <i class="fas fa-bell"></i> <!-- Assuming you have a bell icon from Font Awesome -->
+ </a>
+ 
+         <a href="#" class="nav-item nav-link">
+             <!-- <i class="fas fa-user" style="margin-right: 5px; font-size: 1.2em;"></i> -->
+             {{ user.username }}
+         </a>
+ 
+ 
+         <div class="profile-picture-round">
+             {% if user_profile.image %}
+                 <!-- If user has uploaded a profile picture, display it -->
+                 <img src="{{ user_profile.image.url }}" alt="User Profile Picture">
+             {% else %}
+                 <!-- If no profile picture is uploaded, display a default image -->
+                 <img src="{% static 'css/img/icon/logo.jpg' %}" alt="">
+             {% endif %}
+         </div>
+         
+         
+         
+     </nav>
+     <!-- Navbar End -->
+
+
+<!-- 
+    <h2>User Address</h2>
+{% if user_address %}
+    <p><strong>Address:</strong> {{ user_address.address }}</p>
+    <p><strong>State:</strong> {{ user_address.state }}</p>
+    <p><strong>District:</strong> {{ user_address.district }}</p>
+    <p><strong>Pincode:</strong> {{ user_address.pincode }}</p>
+{% else %}
+    <p>No address found for the user.</p>
+{% endif %}
+
+<h2>Transaction History</h2>
+{% if transactions %}
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <p><strong>User:</strong> {{ transaction.user.username }}</p>
+                <p><strong>owner:</strong> {{ transaction.product.owner.username }}</p>
+                <p><strong>Product Owner's Address:</strong> 
+                    {% with product_owner_address=transaction.product.owner.useraddress_set.first %}
+                        {% if product_owner_address %}
+                            {{ product_owner_address.address }}, {{ product_owner_address.state }}, {{ product_owner_address.district }}, {{ product_owner_address.pincode }}
+                        {% else %}
+                            No address found for the product owner.
+                        {% endif %}
+                    {% endwith %}
+                </p>
+                <p><strong>Product:</strong> {{ transaction.product.brand_name }}</p>
+                <p><strong>Price:</strong> ₹{{ transaction.price }}</p>
+                <p><strong>Timestamp:</strong> {{ transaction.timestamp }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions found.</p>
+{% endif %} -->
+
+
+<!-- new one  -->
+<!-- <h2>User Address</h2>
+{% if user_address %}
+    <p><strong>Address:</strong> {{ user_address.address }}</p>
+    <p><strong>State:</strong> {{ user_address.state }}</p>
+    <p><strong>District:</strong> {{ user_address.district }}</p>
+    <p><strong>Pincode:</strong> {{ user_address.pincode }}</p>
+{% else %}
+    <p>No address found for the user.</p>
+{% endif %} -->
+
+<h2>Transaction History</h2>
+{% if transactions %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Owner</th>
+                    <th>Product Owner's Address</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Timestamp</th>
+                    <th scope="col">Receipt</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.user.username }}</td>
+                        <td>{{ transaction.product.owner.username }}</td>
+                        <td>
+                            {% with product_owner_address=transaction.product.owner.useraddress_set.first %}
+                                {% if product_owner_address %}
+                                    {{ product_owner_address.address }}, {{ product_owner_address.state }}, {{ product_owner_address.district }}, {{ product_owner_address.pincode }}
+                                {% else %}
+                                    No address found for the product owner.
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>{{ transaction.product.brand_name }}</td>
+                        <td>₹{{ transaction.price }}</td>
+                        <td>{{ transaction.timestamp|date }}</td>
+                        <td>
+                            <a href="{% url 'generate_pdf' product_id=transaction.product.id %}" class="btn btn-primary">Download</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger cancel-btn" data-transaction-id="{{ transaction.id }}">Refund</button> 
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p>No transactions found.</p>
+{% endif %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Check local storage for previously cancelled transactions
+        var cancelledTransactions = JSON.parse(localStorage.getItem('cancelledTransactions')) || [];
+
+        // Disable cancel buttons for previously cancelled transactions
+        $('.cancel-btn').each(function() {
+            var cancelButton = $(this);
+            var transactionId = cancelButton.data('transaction-id');
+            if (cancelledTransactions.includes(transactionId)) {
+                cancelButton.prop('disabled', true);
+            }
+        });
+
+        $('.cancel-btn').click(function() {
+            var cancelButton = $(this);
+            var transactionId = cancelButton.data('transaction-id');
+            $.ajax({
+                url: '{% url "cancel_transaction" 0 %}'.replace('0', transactionId),
+                method: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        alert('Transaction cancelled successfully.');
+                        // Disable the cancel button
+                        cancelButton.prop('disabled', true);
+                        // Add the cancelled transaction to local storage
+                        cancelledTransactions.push(transactionId);
+                        localStorage.setItem('cancelledTransactions', JSON.stringify(cancelledTransactions));
+                    } else {
+                        alert('Failed to cancel transaction.');
+                    }
+                },
+                error: function() {
+                    alert('Failed to cancel transaction. Please try again later.');
+                }
+            });
+        });
+    });
+</script>
+
+    
+
+ 
+ 
+ 
+     <!-- JavaScript Libraries -->
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="{% static 'lib/wow/wow.min.js'%}"></script>
+     <script src="{% static 'lib/easing/easing.min.js'%}"></script>
+     <script src="{% static 'lib/waypoints/waypoints.min.js'%}"></script>
+     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js'%}"></script>
+     <script src="{% static 'lib/counterup/counterup.min.js'%}"></script>
+     <script src="{% static 'lib/parallax/parallax.min.js'%}"></script>
+ 
+     <!-- Template Javascript -->
+     <script src="{% static 'js/main.js'%}"></script>
+     
+ 
+ </body>
+ 
+ </html>
+ 
+ 
+ 
+ 
+ 
+ 
+

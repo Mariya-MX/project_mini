@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Owl Carousel for displaying images -->
+            <div class="owl-carousel owl-theme">
+                {% if product.image1 %}
+                <div class="item"><img src="{{ product.image1.url }}" alt="Product Image 1"></div>
+                {% endif %}
+                {% if product.image2 %}
+                <div class="item"><img src="{{ product.image2.url }}" alt="Product Image 2"></div>
+                {% endif %}
+                {% if product.image3 %}
+                <div class="item"><img src="{{ product.image3.url }}" alt="Product Image 3"></div>
+                {% endif %}
+                {% if product.image4 %}
+                <div class="item"><img src="{{ product.image4.url }}" alt="Product Image 4"></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>{{ product.brand_name }}</h2>
+            <p>{{ product.ad_title }}</p>
+            <p>Price: ₹{{ product.price }}</p>
+            <p>Description: {{ product.description }}</p>
+            <p>Contact: {{ product.contact }}</p>
+            
+        </div>
+    </div>
+</div>

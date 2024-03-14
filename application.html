@@ -177,6 +177,11 @@ nav {
     }
 }
 
+    .error-message {
+        color: red;
+    }
+
+
 
 
 
@@ -200,9 +205,22 @@ nav {
 
             <!-- Display Home and Services links for authenticated users -->
             <a href="{% url 'technician_profile' %}" class="nav-item nav-link active" style="color: black;">Home</a>
-            <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a>
-            <a href="" class="nav-item nav-link active"></a>
-            <a href="" class="nav-item nav-link active"></a>
+            <!-- <a href="{% url 'services' %}" class="nav-item nav-link"  style="color: black;">Our Services</a> -->
+          
+
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="myProfileLink" style="color: black;">My Profile</a>
+                <div class="dropdown-menu bg-light border-0 m-0">
+                    <a href="{% url 'profile' %}" class="dropdown-item">Manage Profile</a>
+                    <a href="{% url 'application' %}" class="dropdown-item">Registration form</a>
+                    <a href="{% url 'order_details' %}" class="dropdown-item">order details</a>
+                    <a href="{% url 'change_password'%}" id="changePasswordLink" class="dropdown-item">change password</a>
+                    
+                    <!-- <a href="#" class="dropdown-item">View Details</a> -->
+              
+                </div>
+            </div>
+            <a href="{% url 'logout' %}" class="nav-item nav-link" id="logout-link" style="color: black;">Logout</a>
             
             <!-- Display Register and Login links for non-authenticated users -->
 
@@ -216,17 +234,32 @@ nav {
     {% csrf_token %}
 
     <!-- Personal Information -->
-    <label for="firstName">First Name:</label>
+    <!-- <label for="firstName">First Name:</label>
     <input type="text" id="first_name" name="first_name" value="{{ first_name }}" required >
 
     <label for="lastName">Last Name:</label>
-    <input type="text" id="last_name" name="last_name" value="{{ last_name }}" required >
+    <input type="text" id="last_name" name="last_name" value="{{ last_name }}" required > -->
+
+
+    <!-- Add the error spans under each input field -->
+<label for="firstName">First Name:</label>
+<input type="text" id="first_name" name="first_name" value="{{ first_name }}" required>
+<span id="first_name_error" class="error-message"></span>
+
+<label for="lastName">Last Name:</label>
+<input type="text" id="last_name" name="last_name" value="{{ last_name }}" required>
+<span id="last_name_error" class="error-message"></span>
 
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" value="{{ email }}" required readonly>
 
+    <!-- <label for="number">Phone Number:</label>
+    <input type="tel" id="number" name="number" value="{{ phone_number }}" required > -->
+
+    <!-- Phone Number -->
     <label for="number">Phone Number:</label>
-    <input type="tel" id="number" name="number" value="{{ phone_number }}" required >
+    <input type="tel" id="number" name="number" placeholder="Enter phone number" required>
+    <span id="number_error" class="error-message"></span>
 
     <!-- Upload User Image -->
     <label for="userImage">Upload User Image:</label>
@@ -241,8 +274,13 @@ nav {
     <input type="file" id="idProof" name="idProof" accept="image/*" required>
 
     <!-- Experience -->
-    <label for="experience" class="optional-label">Years of Experience(optional)</label>
-    <input type="number" id="experience" name="experience" >
+    <!-- <label for="experience" class="optional-label">Years of Experience(optional)</label>
+    <input type="number" id="experience" name="experience" > -->
+
+    <label for="experience" class="optional-label">Years of Experience (optional)</label>
+<input type="number" id="experience" name="experience">
+<span id="experience_error" class="error-message"></span>
+
 
     <!-- Service Field (Dropdown) -->
     <label for="service">Select Service:</label>
@@ -292,7 +330,160 @@ if (successParam === 'true') {
 }
 </script>
 
+<!--     
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to validate the first and last name
+        function validateNameInput(inputElement, errorElement) {
+            const inputValue = inputElement.value.trim();
+            let errorMessage = '';
+    
+            // Check if the input contains only alphabetic characters
+            if (!/^[a-zA-Z]+$/.test(inputValue)) {
+                errorMessage = "Please enter only alphabetic characters.";
+            }
+    
+            // Check if the first letter is capitalized
+            if (!/^[A-Z]/.test(inputValue)) {
+                errorMessage = "Name should start with a capital letter.";
+            }
+    
+            // Check for name length constraints
+            const minLength = 2; // Minimum length
+            const maxLength = 30; // Maximum length
+    
+            if (inputValue.length < minLength || inputValue.length > maxLength) {
+                errorMessage = `Name should be between ${minLength} and ${maxLength} characters.`;
+            }
+    
+            // Display the error message under the input field
+            errorElement.textContent = errorMessage;
+        }
+    
+        // Get the first name and last name input elements and their respective error spans
+        const firstNameInput = document.getElementById('first_name');
+        const lastNameInput = document.getElementById('last_name');
+        const firstNameError = document.getElementById('first_name_error');
+        const lastNameError = document.getElementById('last_name_error');
+    
+        // Attach event listeners for real-time validation
+        firstNameInput.addEventListener('input', function () {
+            validateNameInput(this, firstNameError);
+        });
+    
+        lastNameInput.addEventListener('input', function () {
+            validateNameInput(this, lastNameError);
+        });
+    });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to validate the first and last name
+            function validateNameInput(inputElement, errorElement) {
+                const inputValue = inputElement.value.trim();
+                let errorMessage = '';
+    
+                // Check if the input contains only alphabetic characters
+                if (!/^[a-zA-Z]+$/.test(inputValue)) {
+                    errorMessage = "Please enter only alphabetic characters.";
+                }
+    
+                // Check if the first letter is capitalized
+                if (!/^[A-Z]/.test(inputValue)) {
+                    errorMessage = "Name should start with a capital letter.";
+                }
+    
+                // Check for name length constraints
+                const minLength = 2; // Minimum length
+                const maxLength = 30; // Maximum length
+                if (inputValue.length < minLength || inputValue.length > maxLength) {
+                    errorMessage = `Name should be between ${minLength} and ${maxLength} characters.`;
+                }
+    
+                // Display the error message under the input field
+                errorElement.textContent = errorMessage;
+            }
+    
+            // Function to validate the phone number
+            function validatePhoneNumber(inputElement, errorElement) {
+                const phoneNumber = inputElement.value.trim();
+                let errorMessage = '';
+    
+                // Check if the phone number contains only numeric characters
+                if (!/^\d+$/.test(phoneNumber)) {
+                    errorMessage = "Please enter a valid numeric phone number.";
+                }
+    
+                // Check for phone number length constraints
+                const expectedLength = 10; // Expected length
+                if (phoneNumber.length !== expectedLength) {
+                    errorMessage = `Phone number should be exactly ${expectedLength} digits.`;
+                }
+    
+                // Check for leading zeros
+                if (phoneNumber.length > 1 && phoneNumber[0] === '0') {
+                    errorMessage = "Avoid leading zeros in the phone number.";
+                }
 
+
+    
+                // Check for valid prefixes (customize as needed)
+                const validPrefixes = ['9', '8', '7','6']; // Example valid prefixes
+                if (!validPrefixes.includes(phoneNumber.substring(0, 1))) {
+                    errorMessage = "Invalid phone number prefix.";
+                }
+                // Check if the phone number does not exceed 30
+           
+
+    
+                // Display the error message under the input field
+                errorElement.textContent = errorMessage;
+            }
+    
+            // Function to validate years of experience
+            function validateExperienceInput(inputElement, errorElement) {
+                const experienceValue = inputElement.value.trim();
+                let errorMessage = '';
+    
+                // Check if the input is a valid non-negative number
+                if (!/^\d+$/.test(experienceValue)) {
+                    errorMessage = "Please enter a valid non-negative number.";
+                }
+    
+                // Display the error message under the input field
+                errorElement.textContent = errorMessage;
+            }
+    
+            // Get the first name, last name, phone number, and experience input elements and their respective error spans
+            const firstNameInput = document.getElementById('first_name');
+            const lastNameInput = document.getElementById('last_name');
+            const phoneNumberInput = document.getElementById('number');
+            const experienceInput = document.getElementById('experience');
+    
+            const firstNameError = document.getElementById('first_name_error');
+            const lastNameError = document.getElementById('last_name_error');
+            const phoneNumberError = document.getElementById('number_error');
+            const experienceError = document.getElementById('experience_error');
+    
+            // Attach event listeners for real-time validation
+            firstNameInput.addEventListener('input', function () {
+                validateNameInput(this, firstNameError);
+            });
+    
+            lastNameInput.addEventListener('input', function () {
+                validateNameInput(this, lastNameError);
+            });
+    
+            phoneNumberInput.addEventListener('input', function () {
+                validatePhoneNumber(this, phoneNumberError);
+            });
+    
+            experienceInput.addEventListener('input', function () {
+                validateExperienceInput(this, experienceError);
+            });
+        });
+    </script>
+    
 
 </body>
 </html>
